@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security;
 
 namespace CarPark
@@ -21,6 +21,46 @@ namespace CarPark
             Console.WriteLine();
 
 
+
+
+
+            bool exit = false;
+            while (!exit)
+            {
+
+                Console.Write("$ ");
+                string[] cmd = Console.ReadLine().Split(' ');
+
+                if (cmd.Length < 1) continue;
+
+                switch (cmd[0].Strip())
+                {
+                    case "list":
+
+                        if (cmd.Length < 2) {
+                            Console.WriteLine("list [reservations]");
+                            continue;
+                        }
+                        switch (cmd[1])
+                        {
+                            case "reservations":
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                        break;
+
+                    case "logout":
+                        exit = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Unknown command: {0}", cmd[0]);
+                        break;
+                }
+            }
 
         }
 
