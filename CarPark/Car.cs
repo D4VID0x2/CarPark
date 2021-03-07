@@ -1,29 +1,40 @@
 using System;
 
-
-public class Car
+namespace CarPark
 {
-    public Guid Guid { get; private set; }
-    public Brand Brand { get; private set; }
-    public Model Model { get; private set; }
-    public Type Type { get; private set; }
-    public double ConsumptionPer100km { get; private set; }
-}
+
+    public class Car
+    {
+        public int Uid { get; private set; }
+        public CarBrand Brand { get; private set; }
+        public CarModel Model { get; private set; }
+        public CarType Type { get; private set; }
+        public double ComsumptionPer100km { get; private set; }
+
+        public Car(CarBrand brand, CarModel model, CarType type, double comsumption)
+        {
+            Uid = UID.newUID<Car>();
+            this.Brand = brand;
+            this.Model = model;
+            this.Type = type;
+            this.ComsumptionPer100km = comsumption;
+        }
+
+    }
+    public enum CarBrand
+    {
+        Skoda,
+    }
+
+    public enum CarModel
+    {
+        Octavia,
+    }
 
 
-public enum Brand
-{
-    Skoda,
-}
-
-public enum Model
-{
-    Octavia,
-}
-
-
-public enum Type
-{
-    Osobni,
-    Nakladni
+    public enum CarType
+    {
+        Osobni,
+        Nakladni
+    }
 }

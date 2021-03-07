@@ -6,7 +6,7 @@ namespace CarPark
 
     public class User
     {
-        public Guid Guid { get; private set; }
+        public int Uid { get; private set; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public DateTime LastLogin { get; private set; }
