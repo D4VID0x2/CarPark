@@ -35,21 +35,48 @@ namespace CarPark
 
                 switch (cmd[0].Strip())
                 {
-                    case "list":
+                    case "reservations":
 
-                        if (cmd.Length < 2) {
-                            Console.WriteLine("list [reservations]");
+                        if (cmd.Length < 2)
+                        {
+                            Console.WriteLine("reservations [list|add]");
                             continue;
                         }
                         switch (cmd[1])
                         {
-                            case "reservations":
+                            case "list":
+                                //TODO: list all reservations by this user
+                                Console.WriteLine("Reservation #1:");
+                                Console.WriteLine("\tCar #1");
+                                Console.WriteLine("\tFrom 1.1.2021 12:00");
+                                Console.WriteLine("\tUntil 2.1.2021 12:00");
+                                break;
+
+                            case "add":
+                                int carId;
+                                while (true)
+                                {
+                                    Console.WriteLine("Available cars:");
+                                    //TODO: list all cars
+                                    Console.WriteLine("1: Skoda octavia");
+                                    Console.Write("Choose car: ");
+                                    if (int.TryParse(Console.ReadLine(), out int carId)) {
+                                        //TODO: if carId is valid
+                                    }
+                                }
+
                                 break;
 
                             default:
+                                Console.WriteLine("reservations [list|add]");
                                 break;
                         }
 
+                        break;
+
+                    case "help":
+                        Console.WriteLine("reservations [list|add]");
+                        Console.WriteLine("logout");
                         break;
 
                     case "logout":
