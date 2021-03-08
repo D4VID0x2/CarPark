@@ -23,9 +23,9 @@ namespace CarPark
         {
             // TODO: check if the car is free at this time
             
-            Car car = cars[carId];
+            //Car car = cars[carId];
 
-            reservations.Add(new Reservation(user, car, from, until));
+            //reservations.Add(new Reservation(user, car, from, until));
 
 
             return true;

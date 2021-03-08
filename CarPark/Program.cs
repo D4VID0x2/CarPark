@@ -6,8 +6,8 @@ namespace CarPark
     public class Program
     {
 
-        private const string helpText = "reservations [list|add]\n" +
-                                        "changepassword" + 
+        private const string helpText = "reservations [list|add|cancel]\n" +
+                                        "changepassword\n" + 
                                         "logout";
 
 
@@ -34,7 +34,7 @@ namespace CarPark
 
                         if (cmd.Length < 2)
                         {
-                            Console.WriteLine("reservations [list|add]");
+                            Console.WriteLine("reservations [list|add|cancel]");
                             continue;
                         }
                         switch (cmd[1])
@@ -84,15 +84,31 @@ namespace CarPark
 
                                 break;
 
+                            case "cancel":
+                                Console.WriteLine("Reservation has been canceled");
+                                //TODO: cancel reservation
+                                break;
+
                             default:
                                 Console.WriteLine("Unknown option: {0}", cmd[1]);
-                                Console.WriteLine("reservations [list|add]");
+                                Console.WriteLine("reservations [list|add|cancel]");
                                 break;
                         }
 
                         break;
 
                     case "changepassword":
+                        Console.Write("Enter old password: ");
+                        string oldPassword = ReadPassword();
+                        Console.WriteLine();
+                        Console.Write("Enter new password: ");
+                        string newPassword = ReadPassword();
+                        Console.WriteLine();
+                        Console.Write("Enter new password again: ");
+                        string newPasswordConfirm = ReadPassword();
+                        Console.WriteLine();
+
+                        Console.WriteLine("Password changed");
                         //TODO: password change
                         break;
 
@@ -118,12 +134,12 @@ namespace CarPark
 
 
         private static User Login () {
-            Console.Write("Jmeno: ");
+            Console.Write("Name: ");
             string name = Console.ReadLine();
-            Console.Write("Prijmeni: ");
+            Console.Write("Surname: ");
             string surname = Console.ReadLine();
 
-            Console.Write("Heslo: ");
+            Console.Write("Password: ");
             string password = ReadPassword();
             Console.WriteLine();
 
