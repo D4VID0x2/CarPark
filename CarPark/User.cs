@@ -22,7 +22,7 @@ namespace CarPark
         /// </summary>
         /// <param name="password">heslo</param>
         /// <returns>vrati base64 z hashe hesla a soli</returns>
-        public string Hash(string password)
+        public static string Hash(string password)
         {
             // Create salt
             byte[] salt;
