@@ -18,6 +18,16 @@ namespace CarPark
             return output;
         }
 
+
+        public static bool IsEmailUnique (string email)
+        {
+            foreach (User user in users)
+            {
+                if (user.Email == email) return false;
+            }
+            return true;
+        }
+
         
         public static bool AddReservation(User user, int carId, DateTime from, DateTime until)
         {

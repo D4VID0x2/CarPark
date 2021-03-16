@@ -6,7 +6,7 @@ namespace CarPark
 
     public class User
     {
-        public int Uid { get; private set; }
+        public string Email { get; private set; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public DateTime LastLogin { get; private set; }
@@ -16,6 +16,15 @@ namespace CarPark
         private const int SALT_SIZE = 16;
         private const int HASH_SIZE = 20;
         private const int ITERATIONS = 100000;
+
+        public User (string email, string name, string surname, string hash)
+        {
+            this.Email = email;
+            this.Name = name;
+            this.Surname = surname;
+            this.LastLogin = new DateTime(0);
+            this.hash = hash;
+        }
 
         /// <summary>
         /// Vytvori hash z hesla
