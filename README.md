@@ -38,11 +38,15 @@
 ```
 Email: email@example.com
 Password: ********
+
+$
 ```
 
 ### Změna hesla
 
 ```
+$ changepassword
+
 Enter old password: ********
 Enter new password: **********
 Enter new password to confirm: **********
@@ -93,6 +97,8 @@ Reservation created successfully
 $ 
 ```
 
+Systém zobrazí pouze auta, která jsou v tu dobu volná
+
 
 ### Zrušení rezervace
 
@@ -141,6 +147,8 @@ User created successfully
 # 
 ```
 
+Nový uživatel bude automaticky při prvním přihlášení požádán o změnu hesla
+
 ### Zrušení uživatele
 
 ```
@@ -158,6 +166,8 @@ User removed successfully
 
 # 
 ```
+
+Po odstranění uživatele budou automaticky jeho budoucí rezervace zrušeny
 
 ### Vytvoření rezervace jménem uživatele
 
@@ -222,6 +232,26 @@ Car removed successfully
 # 
 ```
 
+Systém neumožní odtranění auta, které je zarezervované a bude ještě použito
+
+
+### Přidání servisního úkonu k autu
+
+```
+# cars service 1
+
+Description: Nutná výměna starých pneumatik
+From: 24.4.2021 9:00
+Until: 24.4.2021 12:00
+
+Car #1 was marked as being serviced and cannot be reserved during that time
+
+#
+```
+
+Pokud v daný čas je již auto zarezervované, upozorní na to administrátora a dostane možnost rezervaci zrušit
+
+
 ### Vynucení změny hesla uživatele
 
 ```
@@ -237,7 +267,7 @@ User #1 will be prompted for password change next time they log in.
 
 ## Struktura databáze
 
-XML
+XML dokument
 
 `database.xml`
 
