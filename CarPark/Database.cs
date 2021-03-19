@@ -13,9 +13,11 @@ namespace CarPark
 
         public static List<Reservation> GetReservations(User user)
         {
-            List<Reservation> output = new List<Reservation>();
-
-            return output;
+            return reservations.FindAll(r => r.User == user);
+        }
+        public static List<Reservation> GetReservations(Car car)
+        {
+            return reservations.FindAll(r => r.Car == car);
         }
 
 
@@ -39,6 +41,40 @@ namespace CarPark
 
 
             return true;
+        }
+
+
+        public static List<Car> GetAvailableCars (DateTime from, DateTime until)
+        {
+            List<Car> availableCars = new List<Car>();
+            foreach (Car car in cars)
+            {
+                bool isFree = true;
+                foreach (Reservation r in GetReservations(car))
+                {
+                    if (r.From < from && r.Until > from && r.Until < until) // beginning overlaps
+                    {
+                       isFree = false; 
+                       break;
+                    }
+                    if (r.From > from && r.From < until && r.Until > from && r.Until < until) // middle overlaps
+                    {
+                       isFree = false; 
+                       break;
+                    }
+                    if (r.From < from && r.From > until && r.Until > until) // end overlaps
+                    {
+                       isFree = false; 
+                       break;
+                    }
+                }
+                if (isFree)
+                {
+                    availableCars.Add(car);
+                }
+            }
+
+            return availableCars;
         }
     }
 }
