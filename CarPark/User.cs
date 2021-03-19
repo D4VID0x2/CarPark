@@ -6,6 +6,7 @@ namespace CarPark
 
     public class User
     {
+        public UID Uid { get; private set; }
         public string Email { get; private set; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
@@ -19,6 +20,7 @@ namespace CarPark
 
         public User (string email, string name, string surname, string hash)
         {
+            Uid = UID.newUID<User>();
             this.Email = email;
             this.Name = name;
             this.Surname = surname;
