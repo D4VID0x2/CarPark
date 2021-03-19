@@ -42,6 +42,8 @@ Password: ********
 $
 ```
 
+Heslo se zobrazuje jako hvězdičky
+
 ### Změna hesla
 
 ```
@@ -53,6 +55,9 @@ Enter new password to confirm: **********
 
 $ 
 ```
+
+Nové heslo se musí zadat dvakrát pro potvrzení
+
 
 ### Přehled aktuálních rezervací
 
@@ -97,7 +102,7 @@ Reservation created successfully
 $ 
 ```
 
-Systém zobrazí pouze auta, která jsou v tu dobu volná
+Systém zobrazí pouze auta, která jsou v tu dobu dostupná
 
 
 ### Zrušení rezervace
@@ -149,6 +154,7 @@ User created successfully
 
 Nový uživatel bude automaticky při prvním přihlášení požádán o změnu hesla
 
+
 ### Zrušení uživatele
 
 ```
@@ -167,7 +173,8 @@ User removed successfully
 # 
 ```
 
-Po odstranění uživatele budou automaticky jeho budoucí rezervace zrušeny
+Po odstranění uživatele budou automaticky jeho budoucí rezervace zrušeny a budou smazána jeho osobní data
+
 
 ### Vytvoření rezervace jménem uživatele
 
@@ -194,6 +201,7 @@ Reservation created successfully
 # 
 ```
 
+
 ### Přidání nového auta
 
 ```
@@ -207,6 +215,7 @@ Car added successfully
 
 # 
 ```
+
 
 ### Zrušení auta
 
@@ -269,16 +278,22 @@ User #1 will be prompted for password change next time they log in.
 
 XML dokument
 
+data uložena jako serialized object v podobě xml pole
+hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
+
 `database.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>  
 <Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">  
   <User email="email@example.com" name="Jan" name="Novák" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
+  <User email="michal@svoboda.cz" name="Michal" name="Svoboda" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
 
-  <Car id="1" brand="Honda" model="Odyssey" type="personal" consumption="4" />
+  <Car id="1" brand="Skoda" model="Octavia" type="personal" consumption="3.5" />
+  <Car id="2" brand="Honda" model="Odyssey" type="personal" consumption="4" />
 
   <Reservation id="1" carId="2" from="1615564751" until="1615568762" />
+  <Reservation id="2" carId="1" from="1615564751" until="1615568762" />
 </Database>  
 ```
 
