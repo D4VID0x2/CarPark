@@ -6,12 +6,12 @@ namespace VozovyPark
     public class Auto
     {
         public int Uid { get; private set; }
-        public ZnackaAuta Znacka { get; private set; }
-        public ModelAuta Model { get; private set; }
+        public string Znacka { get; private set; }
+        public string Model { get; private set; }
         public TypAuta Typ { get; private set; }
         public double SpotrebaNa100km { get; private set; }
 
-        public Auto(ZnackaAuta znacka, ModelAuta model, TypAuta typ, double spotreba)
+        public Auto(string znacka, string model, TypAuta typ, double spotreba)
         {
             Uid = UID.newUID<Auto>();
             this.Znacka = znacka;
@@ -21,16 +21,6 @@ namespace VozovyPark
         }
 
     }
-    public enum ZnackaAuta
-    {
-        Skoda,
-    }
-
-    public enum ModelAuta
-    {
-        Octavia,
-    }
-
 
     public enum TypAuta
     {
