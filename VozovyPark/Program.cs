@@ -1,7 +1,7 @@
 using System;
 using System.Security;
 
-namespace CarPark
+namespace VozovyPark
 {
     public class Program
     {
@@ -11,13 +11,13 @@ namespace CarPark
                                         "logout";
 
 
-        private static User user = null;
+        private static Uzivatel uzivatel = null;
 
         public static void Main(string[] args)
         {
 
 
-            user = Login();
+            uzivatel = Login();
 
             bool exit = false;
             while (!exit)
@@ -40,7 +40,7 @@ namespace CarPark
                         switch (cmd[1])
                         {
                             case "list":
-                                //TODO: list all reservations by this user
+                                //TODO: list all reservations by this uzivatel
                                 Console.WriteLine("Reservation #1:");
                                 Console.WriteLine("\tCar #1");
                                 Console.WriteLine("\tFrom 1.1.2021 12:00");
@@ -61,26 +61,26 @@ namespace CarPark
                                         break;
                                     }
                                 }
-                                DateTime from;
+                                DateTime od;
                                 while (true)
                                 {
                                     Console.Write("From: ");
-                                    if (DateTime.TryParse(Console.ReadLine(), out from))
+                                    if (DateTime.TryParse(Console.ReadLine(), out od))
                                     {
                                         break;
                                     }
                                 }
-                                DateTime until;
+                                DateTime @do;
                                 while (true)
                                 {
                                     Console.Write("Until: ");
-                                    if (DateTime.TryParse(Console.ReadLine(), out until))
+                                    if (DateTime.TryParse(Console.ReadLine(), out @do))
                                     {
                                         break;
                                     }
                                 }
 
-                                Database.AddReservation(user, carId, from, until);
+                                Databaze.AddReservation(uzivatel, carId, od, @do);
 
                                 break;
 
@@ -133,7 +133,7 @@ namespace CarPark
         }
 
 
-        private static User Login () {
+        private static Uzivatel Login () {
             Console.Write("Name: ");
             string name = Console.ReadLine();
             Console.Write("Surname: ");
@@ -144,7 +144,7 @@ namespace CarPark
             Console.WriteLine();
 
 
-            return null; //TODO: get user from database
+            return null; //TODO: get uzivatel from database
         }
 
 

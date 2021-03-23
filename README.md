@@ -53,7 +53,7 @@ Enter old password: ********
 Enter new password: **********
 Enter new password to confirm: **********
 
-$ 
+$
 ```
 
 Nové heslo se musí zadat dvakrát pro potvrzení
@@ -69,13 +69,13 @@ $ reservations list
   From: 10.4.2021 6:00
   Until: 10.4.2021 22:00
 
-Older reservations: 
+Older reservations:
 1:
   Car: Škoda Octacia
   From: 1.3.2021 12:00
   Until: 5.3.2021 12:00
 
-$ 
+$
 ```
 
 
@@ -99,7 +99,7 @@ Choose car: 2
 
 Reservation created successfully
 
-$ 
+$
 ```
 
 Systém zobrazí pouze auta, která jsou v tu dobu dostupná
@@ -108,7 +108,7 @@ Systém zobrazí pouze auta, která jsou v tu dobu dostupná
 ### Zrušení rezervace
 
 ```
-$ reservations cancel 
+$ reservations cancel
 
 Your upcomming reservations:
 
@@ -127,7 +127,7 @@ Choose reservation to cancel: 3
 
 Reservation has been canceled successfully
 
-$ 
+$
 ```
 
 
@@ -149,7 +149,7 @@ Confirm password: ********
 
 User created successfully
 
-# 
+#
 ```
 
 Nový uživatel bude automaticky při prvním přihlášení požádán o změnu hesla
@@ -163,14 +163,14 @@ Nový uživatel bude automaticky při prvním přihlášení požádán o změnu
 1:
   Name: Jan
   Surname: Novák
-  Email: email@example.com 
+  Email: email@example.com
   Last logged in: 2.3.2021 14:23
 
 # users remove 1
 
 User removed successfully
 
-# 
+#
 ```
 
 Po odstranění uživatele budou automaticky jeho budoucí rezervace zrušeny a budou smazána jeho osobní data
@@ -198,7 +198,7 @@ Enter user ID: 1
 
 Reservation created successfully
 
-# 
+#
 ```
 
 
@@ -213,7 +213,7 @@ Consumption per 100km: 4
 
 Car added successfully
 
-# 
+#
 ```
 
 
@@ -238,7 +238,7 @@ Car added successfully
 
 Car removed successfully
 
-# 
+#
 ```
 
 Systém neumožní odtranění auta, které je zarezervované a bude ještě použito
@@ -268,7 +268,7 @@ Pokud v daný čas je již auto zarezervované, upozorní na to administrátora 
 
 User #1 will be prompted for password change next time they log in.
 
-# 
+#
 ```
 
 
@@ -278,7 +278,8 @@ User #1 will be prompted for password change next time they log in.
 
 XML dokument
 
-data uložena jako serialized object v podobě xml pole
+data uložena jako serializovaný object v podobě xml pole
+
 hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 
 `database.xml`
@@ -286,8 +287,8 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 ```xml
 <?xml version="1.0" encoding="utf-8"?>  
 <Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">  
-  <User email="email@example.com" name="Jan" name="Novák" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
-  <User email="michal@svoboda.cz" name="Michal" name="Svoboda" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
+  <User id="1" email="email@example.com" name="Jan" name="Novák" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
+  <User id="2" email="michal@svoboda.cz" name="Michal" name="Svoboda" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
 
   <Car id="1" brand="Skoda" model="Octavia" type="personal" consumption="3.5" />
   <Car id="2" brand="Honda" model="Odyssey" type="personal" consumption="4" />
@@ -297,3 +298,29 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 </Database>  
 ```
 
+
+
+
+## Datové struktury
+
+### Uživatel
+
+- UID - unikátní anonymní identifikátor
+- email - unikátní identifikátor pro přihlašování
+- jméno
+- příjmení
+- datum a čas posledního přihlášení
+- zahashované heslo
+
+
+### Auto
+
+- UID - unikátní identifikátor
+- Značka
+- Model
+- Typ (osobní, nákladní)
+- Spotřeba na 100km
+
+TODO: servisní úkony
+
+### Rezervace

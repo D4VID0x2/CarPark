@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CarPark
+namespace VozovyPark
 {
     public static class UID
     {

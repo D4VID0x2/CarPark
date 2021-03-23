@@ -1,16 +1,16 @@
 using System;
 using System.Security.Cryptography;
 
-namespace CarPark
+namespace VozovyPark
 {
 
-    public class User
+    public class Uzivatel
     {
-        public UID Uid { get; private set; }
+        public int Uid { get; private set; }
         public string Email { get; private set; }
-        public string Name { get; private set; }
-        public string Surname { get; private set; }
-        public DateTime LastLogin { get; private set; }
+        public string Jmeno { get; private set; }
+        public string Prijmeni { get; private set; }
+        public DateTime PosledniPrihlaseni { get; private set; }
 
         private string hash;
 
@@ -18,13 +18,13 @@ namespace CarPark
         private const int HASH_SIZE = 20;
         private const int ITERATIONS = 100000;
 
-        public User (string email, string name, string surname, string hash)
+        public Uzivatel (string email, string jmeno, string prijmeni, string hash)
         {
-            Uid = UID.newUID<User>();
+            Uid = UID.newUID<Uzivatel>();
             this.Email = email;
-            this.Name = name;
-            this.Surname = surname;
-            this.LastLogin = new DateTime(0);
+            this.Jmeno = jmeno;
+            this.Prijmeni = prijmeni;
+            this.PosledniPrihlaseni = new DateTime(0);
             this.hash = hash;
         }
 
