@@ -174,6 +174,7 @@ User removed successfully
 ```
 
 Po odstranění uživatele budou automaticky jeho budoucí rezervace zrušeny a budou smazána jeho osobní data
+Minulé rezervace zůstanou v databázi pod jeho anonymním UID
 
 
 ### Vytvoření rezervace jménem uživatele
@@ -286,16 +287,17 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>  
-<Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">  
-  <User id="1" email="email@example.com" name="Jan" name="Novák" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
-  <User id="2" email="michal@svoboda.cz" name="Michal" name="Svoboda" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" type="user" lastlogin="1615565616"/>  
+<Databaze xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">  
+  <Uzivatel id="0" email="admin" jmeno="admin" prijmeni="admin" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" admin="true" lastlogin="1615565616"/>  
+  <Uzivatel id="1" email="email@example.com" jmeno="Jan" prijmeni="Novák" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" admin="false" lastlogin="1615565616"/>  
+  <Uzivatel id="2" email="michal@svoboda.cz" jmeno="Michal" prijmeni="Svoboda" hash="GWsTR5DVeb4d/ZoAYLfNPa3y2M1NVDUICt7WynzQjB7cKm1m" admin="false" lastlogin="1615565616"/>  
 
-  <Car id="1" brand="Skoda" model="Octavia" type="personal" consumption="3.5" />
-  <Car id="2" brand="Honda" model="Odyssey" type="personal" consumption="4" />
+  <Auto id="1" znacka="Skoda" model="Octavia" typ="osobni" spotreba="3.5" />
+  <Auto id="2" znacka="Honda" model="Odyssey" typ="osobni" spotreba="4" />
 
-  <Reservation id="1" carId="2" from="1615564751" until="1615568762" />
-  <Reservation id="2" carId="1" from="1615564751" until="1615568762" />
-</Database>  
+  <Rezervace id="1" carId="2" from="1615564751" until="1615568762" />
+  <Rezervace id="2" carId="1" from="1615564751" until="1615568762" />
+</Databaze>  
 ```
 
 
@@ -311,6 +313,7 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 - příjmení
 - datum a čas posledního přihlášení
 - zahashované heslo
+- je admin?
 
 
 ### Auto
@@ -320,7 +323,16 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 - Model
 - Typ (osobní, nákladní)
 - Spotřeba na 100km
+- Servisní úkony
 
-TODO: servisní úkony
 
 ### Rezervace
+
+- UID - unikátní identifikátor
+- Uživatel
+- Auto
+- Od
+- Do
+
+
+

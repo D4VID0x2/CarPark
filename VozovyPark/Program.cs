@@ -80,7 +80,7 @@ namespace VozovyPark
                                     }
                                 }
 
-                                Databaze.AddReservation(uzivatel, carId, od, @do);
+                                Databaze.PridatRezervaci(uzivatel, carId, od, @do);
 
                                 break;
 

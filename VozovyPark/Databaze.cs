@@ -11,17 +11,17 @@ namespace VozovyPark
         private static List<Rezervace> rezervace = new List<Rezervace>();
 
 
-        public static List<Rezervace> GetRezervaces(Uzivatel uzivatel)
+        public static List<Rezervace> VsechnyRezervace(Uzivatel uzivatel)
         {
             return rezervace.FindAll(r => r.Uzivatel == uzivatel);
         }
-        public static List<Rezervace> GetRezervaces(Auto auto)
+        public static List<Rezervace> VsechnyRezervace(Auto auto)
         {
             return rezervace.FindAll(r => r.Auto == auto);
         }
 
 
-        public static bool IsEmailUnique (string email)
+        public static bool JeEmailUnikatni (string email)
         {
             foreach (Uzivatel uzivatel in uzivatele)
             {
@@ -31,7 +31,7 @@ namespace VozovyPark
         }
 
         
-        public static bool AddRezervace(Uzivatel uzivatel, int autoId, DateTime od, DateTime @do)
+        public static bool PridatRezervaci(Uzivatel uzivatel, int autoId, DateTime od, DateTime @do)
         {
             // TODO: check if the auto is free at this time
             
@@ -50,7 +50,7 @@ namespace VozovyPark
             foreach (Auto auto in auta)
             {
                 bool jeVolne = true;
-                foreach (Rezervace r in GetRezervaces(auto))
+                foreach (Rezervace r in VsechnyRezervace(auto))
                 {
                     if (r.Od < od && r.Do > od && r.Do < @do) // beginning overlaps
                     {
