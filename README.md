@@ -37,7 +37,7 @@
 
 ```
 Email: email@example.com
-Password: ********
+Heslo: ********
 
 $
 ```
@@ -47,11 +47,11 @@ Heslo se zobrazuje jako hvězdičky
 ### Změna hesla
 
 ```
-$ changepassword
+$ zmena-hesla
 
-Enter old password: ********
-Enter new password: **********
-Enter new password to confirm: **********
+Zadejte staré heslo: ********
+Zadejte nové heslo: **********
+Potvrďte nové heslo: **********
 
 $
 ```
@@ -62,18 +62,18 @@ Nové heslo se musí zadat dvakrát pro potvrzení
 ### Přehled aktuálních rezervací
 
 ```
-$ reservations list
+$ seznam rezervaci
 
 2:
-  Car: Honda Odyssey
-  From: 10.4.2021 6:00
-  Until: 10.4.2021 22:00
+  Auto: Honda Odyssey
+  Od: 10.4.2021 6:00
+  Do: 10.4.2021 22:00
 
-Older reservations:
+Starší rezervace:
 1:
-  Car: Škoda Octacia
-  From: 1.3.2021 12:00
-  Until: 5.3.2021 12:00
+  Auto: Škoda Octacia
+  Od: 1.3.2021 12:00
+  Do: 5.3.2021 12:00
 
 $
 ```
@@ -82,22 +82,22 @@ $
 ### Vytvoření nové rezervace
 
 ```
-$ reservations add
+$ pridat rezervaci
 
-From: 20.4.2021 6:00
-Until: 20.4.2021 18:00
+Od: 20.4.2021 6:00
+Do: 20.4.2021 18:00
 
-Available cars:
+Volná auta:
 
 2:
-  Brand:        Honda
+  Značka:       Honda
   Model:        Odyssey
-  Type:         Personal
-  Consumption:  4l/100km
+  Typ:          Personal
+  Spotřeba:     4l/100km
 
-Choose car: 2
+Vyberte auto: 2
 
-Reservation created successfully
+Rezervace byla úspěšně přidána
 
 $
 ```
@@ -108,24 +108,24 @@ Systém zobrazí pouze auta, která jsou v tu dobu dostupná
 ### Zrušení rezervace
 
 ```
-$ reservations cancel
+$ zrusit rezervaci
 
-Your upcomming reservations:
+Vaše rezervace:
 
 2:
-  Car: Honda Odyssey
-  From: 10.4.2021 6:00
-  Until: 10.4.2021 22:00
+  Auto: Honda Odyssey
+  Od: 10.4.2021 6:00
+  Do: 10.4.2021 22:00
 
 3:
-  Car: Honda Odyssey
-  From: 20.4.2021 6:00
-  Until: 20.4.2021 18:00
+  Auto: Honda Odyssey
+  Od: 20.4.2021 6:00
+  Do: 20.4.2021 18:00
 
-Choose reservation to cancel: 3
+Vyberte rezervaci pro zrušení: 3
 
 
-Reservation has been canceled successfully
+Rezervace byla úspěšně zrušena
 
 $
 ```
@@ -139,15 +139,16 @@ $
 ### Vytvoření nového uživatele
 
 ```
-# users add
+# pridat uzivatele
 
-Enter name: Jan
-Enter surname: Novák
-Enter email: email@example.com
-Enter password: ********
-Confirm password: ********
+Jméno: Jan
+Příjmení: Novák
+Email: email@example.com
+Heslo: ********
+Potvrďte heslo: ********
+Admin (A/N): N
 
-User created successfully
+Uživatel byl úspěšně přidán
 
 #
 ```
@@ -158,17 +159,19 @@ Nový uživatel bude automaticky při prvním přihlášení požádán o změnu
 ### Zrušení uživatele
 
 ```
-# users list
+# seznam uzivatelu
 
 1:
-  Name: Jan
-  Surname: Novák
+  Jméno: Jan
+  Příjmení: Novák
   Email: email@example.com
-  Last logged in: 2.3.2021 14:23
+  Naposledy přihlášen: 2.3.2021 14:23
+  Admin: Ne
+  Nutná změna hesla: Ne
 
-# users remove 1
+# zrusit uzivatele
 
-User removed successfully
+Uživatel zrušen
 
 #
 ```
@@ -180,24 +183,24 @@ Minulé rezervace zůstanou v databázi pod jeho anonymním UID
 ### Vytvoření rezervace jménem uživatele
 
 ```
-# reservations add
+# pridat rezervaci
 
-From: 20.4.2021 6:00
-Until: 20.4.2021 18:00
+Od: 20.4.2021 6:00
+Do: 20.4.2021 18:00
 
-Available cars:
+Volná auta:
 
 2:
-  Brand:        Honda
+  Značka:       Honda
   Model:        Odyssey
-  Type:         Personal
-  Consumption:  4l/100km
+  Typ:          Personal
+  Spotřeba:     4l/100km
 
-Choose car: 2
+Vyberte auto: 2
 
-Enter user ID: 1
+Zadejte ID uživatele: 1
 
-Reservation created successfully
+Rezervace byla úspěšně přidána
 
 #
 ```
@@ -206,13 +209,14 @@ Reservation created successfully
 ### Přidání nového auta
 
 ```
-# cars add
-Brand: Honda
-Model: Odyssey
-Type: Personal
-Consumption per 100km: 4
+# pridat auto
 
-Car added successfully
+Značka: Honda
+Model: Odyssey
+Typ: Osobni
+Spotřeba: 4
+
+Auto přidáno
 
 #
 ```
@@ -221,23 +225,23 @@ Car added successfully
 ### Zrušení auta
 
 ```
-# cars list
+# seznam aut
 
 1:
-  Brand:        Škoda
+  Značka:       Škoda
   Model:        Octacia
-  Type:         Personal
-  Consumption:  3.7l/100km
+  Typ:          Osobní
+  Spotřeba:     3.7l/100km
 
 2:
-  Brand:        Honda
+  Značka:       Honda
   Model:        Odyssey
-  Type:         Personal
-  Consumption:  4l/100km
+  Typ:          Personal
+  Spotřeba:     4l/100km
 
-# cars remove 2
+# zrusit auto 2
 
-Car removed successfully
+Auto #2 zrušeno
 
 #
 ```
@@ -250,11 +254,14 @@ Systém neumožní odtranění auta, které je zarezervované a bude ještě pou
 ```
 # cars service 1
 
-Description: Nutná výměna starých pneumatik
-From: 24.4.2021 9:00
-Until: 24.4.2021 12:00
+Popis: Nutná výměna starých pneumatik
+Od: 24.4.2021 9:00
+Do: 24.4.2021 12:00
+Cena: 500 Kč
+Číslo faktury: 123456789
 
-Car #1 was marked as being serviced and cannot be reserved during that time
+
+Auto #1 bylo označeno jako v servisu a nebude možné ho zarezervovat
 
 #
 ```
@@ -265,9 +272,9 @@ Pokud v daný čas je již auto zarezervované, upozorní na to administrátora 
 ### Vynucení změny hesla uživatele
 
 ```
-# users force-password-renew 1
+# zmena hesla uzivatele 1
 
-User #1 will be prompted for password change next time they log in.
+Uživatel #1 bude při příštím přihlášení požádán o změnu hesla
 
 #
 ```
@@ -295,8 +302,8 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
   <Auto id="1" znacka="Skoda" model="Octavia" typ="osobni" spotreba="3.5" />
   <Auto id="2" znacka="Honda" model="Odyssey" typ="osobni" spotreba="4" />
 
-  <Rezervace id="1" carId="2" from="1615564751" until="1615568762" />
-  <Rezervace id="2" carId="1" from="1615564751" until="1615568762" />
+  <Rezervace id="1" idAuta="2" od="1615564751" do="1615568762" />
+  <Rezervace id="2" idAuta="1" od="1615564751" do="1615568762" />
 </Databaze>  
 ```
 
@@ -314,6 +321,7 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 - datum a čas posledního přihlášení
 - zahashované heslo
 - je admin?
+- je nutná změna hesla?
 
 
 ### Auto
@@ -335,4 +343,13 @@ hesla jsou uložena bezpečně jako hash, takže je nelze zneužít
 - Do
 
 
+### Servisni Úkon
+
+- UID - unikátní identifikátor
+- Od
+- Do
+- Cena
+- Popis
+- Číslo faktury
+ 
 
