@@ -20,6 +20,11 @@ namespace VozovyPark
             this.SpotrebaNa100km = spotreba;
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", this.Znacka, this.Model);
+        }
+
     }
 
     public enum TypAuta

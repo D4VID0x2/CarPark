@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace VozovyPark
 {
@@ -28,6 +29,21 @@ namespace VozovyPark
                 if (uzivatel.Email == email) return false;
             }
             return true;
+        }
+
+
+        public static Uzivatel Prihlaseni(string email, string hash)
+        {
+            Uzivatel uzivatel = uzivatele.Where(uzivatel => uzivatel.email == email).FirstOrDefault();
+            if (uzivatel != null)
+            {
+                if (uzivatel.OverHeslo(hash))
+                {
+                    return uzivatel;
+                } 
+            }
+
+            return null;
         }
 
         

@@ -6,7 +6,7 @@ namespace VozovyPark
     public class Program
     {
 
-        private const string helpText = "reservations [list|add|cancel]\n" +
+        private const string napoveda = "reservations [list|add|cancel]\n" +
                                         "changepassword\n" + 
                                         "logout";
 
@@ -17,19 +17,89 @@ namespace VozovyPark
         {
 
 
-            uzivatel = Login();
+            uzivatel = Prihlaseni();
 
             bool exit = false;
             while (!exit)
             {
 
-                Console.Write("$ ");
-                string[] cmd = Console.ReadLine().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (uzivatel.JeAdmin) {
 
-                if (cmd.Length < 1) continue;
+                    Console.Write("# ");
+                    string cmd = Console.ReadLine().Trim().ToLower();
 
+                    if (cmd.Length < 1) continue;
+
+                } else {
+
+                    Console.Write("$ ");
+                    string cmd = Console.ReadLine().Trim().ToLower();
+
+                    if (cmd.Length < 1) continue;
+
+                    switch (cmd)
+                    {
+                        case "seznam rezervaci":
+                            foreach (Rezervace rezervace in Databaze.VsechnyRezervace(uzivatel))
+                            {
+                                Console.WriteLine(rezervace); 
+                            }
+                            break;
+
+                        case "pridat rezervaci":
+
+                            DateTime od;
+                            while (true)
+                            {
+                                Console.Write("Od: ");
+                                if (DateTime.TryParse(Console.ReadLine(), out od))
+                                {
+                                    Console.WriteLine("Zadaná hodnota není typu DateTime");
+                                    break;
+                                }
+                                if (od < DateTime.Now)
+                                {
+                                    Console.WriteLine("Zadaná hodnota nesmí být v minulosti");
+                                    break;
+                                }
+                            }
+                            DateTime @do;
+                            while (true)
+                            {
+                                Console.Write("Do: ");
+                                if (DateTime.TryParse(Console.ReadLine(), out @do))
+                                {
+                                    Console.WriteLine("Zadaná hodnota není typu DateTime");
+                                    break;
+                                }
+                                if (@do < DateTime.Now)
+                                {
+                                    Console.WriteLine("Zadaná hodnota nesmí být v minulosti");
+                                    break;
+                                }
+                                if (@do < od)
+                                {
+                                    Console.WriteLine("Zadaná hodnota musí být větší než hodnota Od");
+                                    break;
+                                }
+                            }
+
+                            break;
+
+
+                        default:
+                            Console.WriteLine("Neznámý příkaz: {0}", cmd[0]);
+                            Console.WriteLine(napoveda);
+                            break;
+                    } 
+
+                }
+                /*
                 switch (cmd[0].Trim())
                 {
+
+
+
                     case "reservations":
 
                         if (cmd.Length < 2)
@@ -97,50 +167,54 @@ namespace VozovyPark
 
                         break;
 
-                    case "changepassword":
-                        Console.Write("Enter old password: ");
-                        string oldPassword = ReadPassword();
+                    case "zmenit-heslo":
+                        Console.Write("Zadejte staré heslo: ");
+                        string stareHeslo = NactiHeslo();
                         Console.WriteLine();
-                        Console.Write("Enter new password: ");
-                        string newPassword = ReadPassword();
+                        Console.Write("Zadejte nové heslo: ");
+                        string noveHeslo = NactiHeslo();
                         Console.WriteLine();
-                        Console.Write("Enter new password again: ");
-                        string newPasswordConfirm = ReadPassword();
+                        Console.Write("Potvrďte nové heslo: ");
+                        string potvrzeniHesla = NactiHeslo();
                         Console.WriteLine();
 
-                        Console.WriteLine("Password changed");
+                        if (noveHeslo != potvrzeniHesla) {
+                            //TODO: znovu
+                        }
+
                         //TODO: password change
+                        
+                        Console.WriteLine("Heslo změněno");
                         break;
 
-                    case "help":
+                    case "napoveda":
                     case "?":
-                        Console.WriteLine(helpText);
+                        Console.WriteLine(napoveda);
                         break;
 
-                    case "logout":
+                    case "odhlasit-se":
                     case "exit":
-                    case "quit":
+                    case "konec":
                         exit = true;
                         break;
 
                     default:
-                        Console.WriteLine("Unknown command: {0}", cmd[0]);
-                        Console.WriteLine(helpText);
+                        Console.WriteLine("Neznámý příkaz: {0}", cmd[0]);
+                        Console.WriteLine(napoveda);
                         break;
                 }
+                */
             }
 
         }
 
 
-        private static Uzivatel Login () {
-            Console.Write("Name: ");
-            string name = Console.ReadLine();
-            Console.Write("Surname: ");
-            string surname = Console.ReadLine();
+        private static Uzivatel Prihlaseni () {
+            Console.Write("Email: ");
+            string email = Console.ReadLine();
 
-            Console.Write("Password: ");
-            string password = ReadPassword();
+            Console.Write("Heslo: ");
+            string hash = NactiHeslo();
             Console.WriteLine();
 
 
@@ -148,7 +222,7 @@ namespace VozovyPark
         }
 
 
-        public static string ReadPassword()
+        public static string NactiHeslo()
         {
             string password = "";
             while (true)
@@ -166,7 +240,7 @@ namespace VozovyPark
                         Console.Write("\b \b");
                     }
                 }
-                else if (i.KeyChar != '\u0000') // KeyChar == '\u0000' if the key pressed does not correspond to a printable character, e.g. F1, Pause-Break, etc
+                else if (i.KeyChar != '\u0000')
                 {
                     password += i.KeyChar;
                     Console.Write("*");

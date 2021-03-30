@@ -11,6 +11,8 @@ namespace VozovyPark
         public string Jmeno { get; private set; }
         public string Prijmeni { get; private set; }
         public DateTime PosledniPrihlaseni { get; private set; }
+        public bool JeAdmin { get; private set; }
+        public bool NutnaZmenaHesla { get; private set; }
 
         private string hash;
 
@@ -18,7 +20,7 @@ namespace VozovyPark
         private const int HASH_SIZE = 20;
         private const int ITERATIONS = 100000;
 
-        public Uzivatel (string email, string jmeno, string prijmeni, string hash)
+        public Uzivatel (string email, string jmeno, string prijmeni, string hash, bool jeAdmin, bool nutnaZmenaHesla = true)
         {
             Uid = UID.newUID<Uzivatel>();
             this.Email = email;
@@ -26,6 +28,8 @@ namespace VozovyPark
             this.Prijmeni = prijmeni;
             this.PosledniPrihlaseni = new DateTime(0);
             this.hash = hash;
+            this.JeAdmin = jeAdmin;
+            this.NutnaZmenaHesla = nutnaZmenaHesla;
         }
 
         /// <summary>
@@ -53,11 +57,11 @@ namespace VozovyPark
 
 
         /// <summary>
-        /// Zkontroluje jestli je heslo spravne
+        /// Zkontroluje jestli je heslo spravne (Porovna oba hashe)
         /// </summary>
-        /// <param name="password">heslo</param>
+        /// <param name="password">hash hesla k overeni</param>
         /// <returns>Vrati true pokud je heslo spravne</returns>
-        public bool Verify(string password)
+        public bool OverHeslo(string password)
         {
             // Get hash bytes
             byte[] hashBytes = Convert.FromBase64String(this.hash);

@@ -19,5 +19,11 @@ namespace VozovyPark
             this.Do = @do;
         }
 
+
+        public override string ToString()
+        {
+            return string.Format("#{0}:\n  \tAuto: {1}\n  \tOd: {2}\n  \tDo: {3}\n", this.Uid, this.Auto, this.Od, this.Od);
+        }
+
     }
 }
