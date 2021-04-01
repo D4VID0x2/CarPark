@@ -84,5 +84,10 @@ namespace VozovyPark
             }
             return true;
         }
+
+        public void ZmenitHeslo (string novyHash)
+        {
+            this.hash = novyHash;
+        }
     }
 }

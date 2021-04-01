@@ -86,6 +86,48 @@ namespace VozovyPark
 
                             break;
 
+                        case "zmenit heslo":
+                            while (true)
+                            {
+                                Console.Write("Zadejte staré heslo: ");
+                                string stareHeslo = NactiHeslo();
+                                Console.WriteLine();
+                                if (!uzivatel.OverHeslo(stareHeslo))
+                                {
+                                    Console.WriteLine("Staré heslo není správné");
+                                    continue;
+                                }
+
+                                Console.Write("Zadejte nové heslo: ");
+                                string noveHeslo = NactiHeslo();
+                                Console.WriteLine();
+                                Console.Write("Potvrďte nové heslo: ");
+                                string potvrzeniHesla = NactiHeslo();
+                                Console.WriteLine();
+
+
+                                if (noveHeslo != potvrzeniHesla) {
+                                    Console.WriteLine("Nová hesla nejsou stejná");
+                                    continue;
+                                }
+                            }
+
+                            uzivatel.ZmenitHeslo(noveHeslo);
+
+                            Console.WriteLine("Heslo změněno");
+
+                            break;
+
+                        case "napoveda":
+                        case "?":
+                            Console.WriteLine(napoveda);
+                            break;
+
+                        case "odhlasit-se":
+                        case "exit":
+                        case "konec":
+                            exit = true;
+                            break;
 
                         default:
                             Console.WriteLine("Neznámý příkaz: {0}", cmd[0]);
@@ -109,13 +151,6 @@ namespace VozovyPark
                         }
                         switch (cmd[1])
                         {
-                            case "list":
-                                //TODO: list all reservations by this uzivatel
-                                Console.WriteLine("Reservation #1:");
-                                Console.WriteLine("\tCar #1");
-                                Console.WriteLine("\tFrom 1.1.2021 12:00");
-                                Console.WriteLine("\tUntil 2.1.2021 12:00");
-                                break;
 
                             case "add":
                                 int carId;
@@ -166,42 +201,6 @@ namespace VozovyPark
                         }
 
                         break;
-
-                    case "zmenit-heslo":
-                        Console.Write("Zadejte staré heslo: ");
-                        string stareHeslo = NactiHeslo();
-                        Console.WriteLine();
-                        Console.Write("Zadejte nové heslo: ");
-                        string noveHeslo = NactiHeslo();
-                        Console.WriteLine();
-                        Console.Write("Potvrďte nové heslo: ");
-                        string potvrzeniHesla = NactiHeslo();
-                        Console.WriteLine();
-
-                        if (noveHeslo != potvrzeniHesla) {
-                            //TODO: znovu
-                        }
-
-                        //TODO: password change
-                        
-                        Console.WriteLine("Heslo změněno");
-                        break;
-
-                    case "napoveda":
-                    case "?":
-                        Console.WriteLine(napoveda);
-                        break;
-
-                    case "odhlasit-se":
-                    case "exit":
-                    case "konec":
-                        exit = true;
-                        break;
-
-                    default:
-                        Console.WriteLine("Neznámý příkaz: {0}", cmd[0]);
-                        Console.WriteLine(napoveda);
-                        break;
                 }
                 */
             }
@@ -213,12 +212,22 @@ namespace VozovyPark
             Console.Write("Email: ");
             string email = Console.ReadLine();
 
-            Console.Write("Heslo: ");
-            string hash = NactiHeslo();
-            Console.WriteLine();
+            while (true)
+            {
+                Console.Write("Heslo: ");
+                string hash = NactiHeslo();
+                Console.WriteLine();
 
+                Uzivatel uzivatel = Databaze.Prihlaseni(email, hash);
 
-            return null; //TODO: get uzivatel from database
+                if (uzivatel == null) 
+                {
+                    Console.WriteLine("Neplatné přihlašovací údaje");
+                    continue;
+                }
+            }
+
+            return uzivatel;
         }
 
 

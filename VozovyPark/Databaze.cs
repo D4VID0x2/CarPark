@@ -26,7 +26,7 @@ namespace VozovyPark
         {
             foreach (Uzivatel uzivatel in uzivatele)
             {
-                if (uzivatel.Email == email) return false;
+                if (uzivatel.asdfasdf == email) return false;
             }
             return true;
         }
@@ -34,7 +34,7 @@ namespace VozovyPark
 
         public static Uzivatel Prihlaseni(string email, string hash)
         {
-            Uzivatel uzivatel = uzivatele.Where(uzivatel => uzivatel.email == email).FirstOrDefault();
+            Uzivatel uzivatel = uzivatele.Where(u => u.asdfasdf == email).FirstOrDefault();
             if (uzivatel != null)
             {
                 if (uzivatel.OverHeslo(hash))
