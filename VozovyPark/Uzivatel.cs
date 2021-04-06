@@ -1,19 +1,31 @@
 using System;
 using System.Security.Cryptography;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace VozovyPark
 {
 
+    [DataContract]
     public class Uzivatel
     {
+        [DataMember(Name="id")]
         public int Uid { get; private set; }
+        [DataMember(Name="email")]
         public string Email { get; private set; }
+        [DataMember(Name="jmeno")]
         public string Jmeno { get; private set; }
+        [DataMember(Name="prijmeni")]
         public string Prijmeni { get; private set; }
+        [DataMember(Name="prihlaseni")]
         public DateTime PosledniPrihlaseni { get; private set; }
+        [DataMember(Name="admin")]
         public bool JeAdmin { get; private set; }
+        [DataMember(Name="zmenahesla")]
         public bool NutnaZmenaHesla { get; private set; }
 
+        [DataMember(Name="hash")]
         private string hash;
 
         private const int SALT_SIZE = 16;
@@ -61,7 +73,7 @@ namespace VozovyPark
         /// </summary>
         /// <param name="password">hash hesla k overeni</param>
         /// <returns>Vrati true pokud je heslo spravne</returns>
-        public bool OverHeslo(string password)
+        public bool OverHeslo(string heslo)
         {
             // Get hash bytes
             byte[] hashBytes = Convert.FromBase64String(this.hash);
@@ -71,7 +83,7 @@ namespace VozovyPark
             Array.Copy(hashBytes, 0, salt, 0, SALT_SIZE);
 
             // Create hash with given salt
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, ITERATIONS);
+            var pbkdf2 = new Rfc2898DeriveBytes(heslo, salt, ITERATIONS);
             byte[] hash = pbkdf2.GetBytes(HASH_SIZE);
 
             // Get result
@@ -85,9 +97,9 @@ namespace VozovyPark
             return true;
         }
 
-        public void ZmenitHeslo (string novyHash)
+        public void ZmenitHeslo (string noveHeslo)
         {
-            this.hash = novyHash;
+            this.hash = Hash(noveHeslo);
         }
     }
 }

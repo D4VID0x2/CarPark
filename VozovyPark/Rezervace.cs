@@ -1,16 +1,25 @@
 using System;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace VozovyPark
 {
+    [DataContract]
     public class Rezervace
     {
+        [DataMember(Name="id")]
         public int Uid { get; private set; }
-        public Uzivatel Uzivatel { get; private set; }
-        public Auto Auto { get; private set; }
+        [DataMember(Name="uzivatel")]
+        public int Uzivatel { get; private set; }
+        [DataMember(Name="id")]
+        public int Auto { get; private set; }
+        [DataMember(Name="od")]
         public DateTime Od { get; private set; }
+        [DataMember(Name="do")]
         public DateTime Do { get; private set; }
 
-        public Rezervace(Uzivatel uzivatel, Auto auto, DateTime od, DateTime @do)
+        public Rezervace(int uzivatel, int auto, DateTime od, DateTime @do)
         {
             this.Uid = UID.newUID<Rezervace>();
             this.Uzivatel = uzivatel;

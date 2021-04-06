@@ -9,6 +9,10 @@ namespace VozovyPark
 
         public static int newUID<T>()
         {
+            if (!ids.ContainsKey(typeof(T)))
+            {
+                ids.Add(typeof(T), 0);
+            }
             return ++ids[typeof(T)];
         }
     }

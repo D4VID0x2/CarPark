@@ -1,5 +1,6 @@
 using System;
 using System.Security;
+using System.Collections.Generic;
 
 namespace VozovyPark
 {
@@ -7,14 +8,38 @@ namespace VozovyPark
     {
 
         private const string napoveda = "reservations [list|add|cancel]\n" +
-                                        "changepassword\n" + 
+                                        "changepassword\n" +
                                         "logout";
+
+        private const string adminNapoveda = "reservations [list|add|cancel]\n" +
+                                             "changepassword\n" +
+                                             "logout";
 
 
         private static Uzivatel uzivatel = null;
 
+        private static Databaze databaze;
+
         public static void Main(string[] args)
         {
+
+            //WRITING TEST
+            //databaze = new Databaze();
+            //databaze.UlozDatabazi();
+
+
+            //READING TEST
+
+            databaze = Databaze.NactiDatabazi();
+
+            //databaze.Test();
+
+            //Console.WriteLine(Uzivatel.Hash("heslo"));
+
+            //return;
+
+
+
 
 
             uzivatel = Prihlaseni();
@@ -23,14 +48,39 @@ namespace VozovyPark
             while (!exit)
             {
 
-                if (uzivatel.JeAdmin) {
+                if (uzivatel.JeAdmin)
+                {
 
                     Console.Write("# ");
                     string cmd = Console.ReadLine().Trim().ToLower();
 
                     if (cmd.Length < 1) continue;
+                    switch (cmd)
+                    {
+                        case "zmenit heslo":
+                            ZmenaHesla();
+                            break;
 
-                } else {
+                        case "napoveda":
+                        case "?":
+                            Console.WriteLine(adminNapoveda);
+                            break;
+
+                        case "odhlasit-se":
+                        case "exit":
+                        case "konec":
+                            exit = true;
+                            break;
+
+                        default:
+                            Console.WriteLine("Neznámý příkaz: {0}", cmd);
+                            Console.WriteLine(adminNapoveda);
+                            break;
+                    }
+
+                }
+                else
+                {
 
                     Console.Write("$ ");
                     string cmd = Console.ReadLine().Trim().ToLower();
@@ -40,9 +90,9 @@ namespace VozovyPark
                     switch (cmd)
                     {
                         case "seznam rezervaci":
-                            foreach (Rezervace rezervace in Databaze.VsechnyRezervace(uzivatel))
+                            foreach (Rezervace rezervace in databaze.VsechnyRezervace(uzivatel.Uid))
                             {
-                                Console.WriteLine(rezervace); 
+                                Console.WriteLine(rezervace);
                             }
                             break;
 
@@ -84,38 +134,33 @@ namespace VozovyPark
                                 }
                             }
 
-                            break;
+                            List<Auto> volnaAuta = databaze.VolnaAuta(od, @do);
 
-                        case "zmenit heslo":
+                            Console.WriteLine("Volná auta:");
+                            foreach (Auto auto in volnaAuta)
+                            {
+                                Console.WriteLine(auto);
+                            }
+
+                            int carId;
                             while (true)
                             {
-                                Console.Write("Zadejte staré heslo: ");
-                                string stareHeslo = NactiHeslo();
-                                Console.WriteLine();
-                                if (!uzivatel.OverHeslo(stareHeslo))
+                                Console.WriteLine("Zvolte auto:");
+                                if (int.TryParse(Console.ReadLine(), out carId))
                                 {
-                                    Console.WriteLine("Staré heslo není správné");
-                                    continue;
+                                    //TODO: if carId is valid
+                                    break;
                                 }
-
-                                Console.Write("Zadejte nové heslo: ");
-                                string noveHeslo = NactiHeslo();
-                                Console.WriteLine();
-                                Console.Write("Potvrďte nové heslo: ");
-                                string potvrzeniHesla = NactiHeslo();
-                                Console.WriteLine();
-
-
-                                if (noveHeslo != potvrzeniHesla) {
-                                    Console.WriteLine("Nová hesla nejsou stejná");
-                                    continue;
+                                else
+                                {
+                                    Console.WriteLine("Zadaná hodnota musí být číslo");
                                 }
                             }
 
-                            uzivatel.ZmenitHeslo(noveHeslo);
+                            break;
 
-                            Console.WriteLine("Heslo změněno");
-
+                        case "zmenit heslo":
+                            ZmenaHesla();
                             break;
 
                         case "napoveda":
@@ -133,101 +178,86 @@ namespace VozovyPark
                             Console.WriteLine("Neznámý příkaz: {0}", cmd[0]);
                             Console.WriteLine(napoveda);
                             break;
-                    } 
+                    }
 
                 }
-                /*
-                switch (cmd[0].Trim())
-                {
-
-
-
-                    case "reservations":
-
-                        if (cmd.Length < 2)
-                        {
-                            Console.WriteLine("reservations [list|add|cancel]");
-                            continue;
-                        }
-                        switch (cmd[1])
-                        {
-
-                            case "add":
-                                int carId;
-                                while (true)
-                                {
-                                    Console.WriteLine("Available cars:");
-                                    //TODO: list all cars
-                                    Console.WriteLine("1: Skoda octavia");
-                                    Console.Write("Choose car: ");
-                                    if (int.TryParse(Console.ReadLine(), out carId))
-                                    {
-                                        //TODO: if carId is valid
-                                        break;
-                                    }
-                                }
-                                DateTime od;
-                                while (true)
-                                {
-                                    Console.Write("From: ");
-                                    if (DateTime.TryParse(Console.ReadLine(), out od))
-                                    {
-                                        break;
-                                    }
-                                }
-                                DateTime @do;
-                                while (true)
-                                {
-                                    Console.Write("Until: ");
-                                    if (DateTime.TryParse(Console.ReadLine(), out @do))
-                                    {
-                                        break;
-                                    }
-                                }
-
-                                Databaze.PridatRezervaci(uzivatel, carId, od, @do);
-
-                                break;
-
-                            case "cancel":
-                                Console.WriteLine("Reservation has been canceled");
-                                //TODO: cancel reservation
-                                break;
-
-                            default:
-                                Console.WriteLine("Unknown option: {0}", cmd[1]);
-                                Console.WriteLine("reservations [list|add|cancel]");
-                                break;
-                        }
-
-                        break;
-                }
-                */
             }
+
+            databaze.UlozDatabazi();
 
         }
 
 
-        private static Uzivatel Prihlaseni () {
-            Console.Write("Email: ");
-            string email = Console.ReadLine();
+        private static Uzivatel Prihlaseni()
+        {
 
             while (true)
             {
+                Console.Write("Email: ");
+                string email = Console.ReadLine();
                 Console.Write("Heslo: ");
                 string hash = NactiHeslo();
                 Console.WriteLine();
 
-                Uzivatel uzivatel = Databaze.Prihlaseni(email, hash);
+                Uzivatel uzivatel = databaze.Prihlaseni(email, hash);
 
-                if (uzivatel == null) 
+                if (uzivatel == null)
                 {
                     Console.WriteLine("Neplatné přihlašovací údaje");
                     continue;
                 }
+
+                //TODO: nutna zmena hesla
+
+                return uzivatel;
+            }
+        }
+
+
+        private static bool ZmenaHesla()
+        {
+            string noveHeslo = "";
+            while (true)
+            {
+                Console.Write("Zadejte staré heslo: ");
+                string stareHeslo = NactiHeslo();
+                Console.WriteLine();
+                if (!uzivatel.OverHeslo(stareHeslo))
+                {
+                    Console.WriteLine("Staré heslo není správné");
+                    continue;
+                }
+                break;
+            }
+            while (true)
+            {
+
+                Console.Write("Zadejte nové heslo: ");
+                noveHeslo = NactiHeslo();
+                Console.WriteLine();
+                if (noveHeslo == "") continue;
+
+                Console.Write("Potvrďte nové heslo: ");
+                string potvrzeniHesla = NactiHeslo();
+                Console.WriteLine();
+
+
+                if (noveHeslo != potvrzeniHesla)
+                {
+                    Console.WriteLine("Nová hesla nejsou stejná");
+                    continue;
+                }
+
+                break;
             }
 
-            return uzivatel;
+            if (noveHeslo != "")
+            {
+                uzivatel.ZmenitHeslo(noveHeslo);
+
+                Console.WriteLine("Heslo změněno");
+            }
+            return true;
         }
 
 
