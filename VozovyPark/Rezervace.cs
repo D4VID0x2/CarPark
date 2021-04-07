@@ -12,7 +12,7 @@ namespace VozovyPark
         public int Uid { get; private set; }
         [DataMember(Name="uzivatel")]
         public int Uzivatel { get; private set; }
-        [DataMember(Name="id")]
+        [DataMember(Name="auto")]
         public int Auto { get; private set; }
         [DataMember(Name="od")]
         public DateTime Od { get; private set; }

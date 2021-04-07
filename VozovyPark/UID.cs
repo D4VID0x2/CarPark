@@ -7,7 +7,7 @@ namespace VozovyPark
     [DataContract]
     public class UID
     {
-        private static UID instance;
+        public static UID instance;
 
         [DataMember(Name = "ids")]
         private Dictionary<string, int> ids = new Dictionary<string, int>();

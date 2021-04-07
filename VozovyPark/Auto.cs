@@ -36,7 +36,7 @@ namespace VozovyPark
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", this.Znacka, this.Model);
+            return string.Format("#{0}:\n  Značka: {1}\n  Model: {2}\n  Typ: {3}\n  Spotřeba: {4}", this.Uid, this.Znacka, this.Model, this.Typ, this.SpotrebaNa100km);
         }
 
     }

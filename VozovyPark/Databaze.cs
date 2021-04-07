@@ -22,7 +22,7 @@ namespace VozovyPark
         private List<Rezervace> rezervace = new List<Rezervace>();
 
         [DataMember(Name = "uid")]
-        private UID uid;
+        public UID uid;
 
         public void Test ()
         {
@@ -149,7 +149,9 @@ namespace VozovyPark
             {
                 using (XmlReader xr = XmlReader.Create(sr))
                 {
-                    return (Databaze) xmlSerializer.ReadObject(xr);
+                    Databaze db = (Databaze) xmlSerializer.ReadObject(xr);
+                    UID.instance = db.uid;
+                    return db;
                 }
             }
 

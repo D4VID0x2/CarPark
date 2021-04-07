@@ -1,15 +1,16 @@
 using System;
-using System.Security;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VozovyPark
 {
     public class Program
     {
 
-        private const string napoveda = "reservations [list|add|cancel]\n" +
-                                        "changepassword\n" +
-                                        "logout";
+        private const string napoveda = "seznam rezervaci\n" +
+                                        "pridat rezervaci\n" +
+                                        "zmenit heslo\n" +
+                                        "odhlasit se | exit | konec";
 
         private const string adminNapoveda = "reservations [list|add|cancel]\n" +
                                              "changepassword\n" +
@@ -67,7 +68,7 @@ namespace VozovyPark
                             Console.WriteLine(adminNapoveda);
                             break;
 
-                        case "odhlasit-se":
+                        case "odhlasit se":
                         case "exit":
                         case "konec":
                             exit = true;
@@ -103,36 +104,38 @@ namespace VozovyPark
                             while (true)
                             {
                                 Console.Write("Od: ");
-                                if (DateTime.TryParse(Console.ReadLine(), out od))
+                                if (!DateTime.TryParse(Console.ReadLine(), out od))
                                 {
                                     Console.WriteLine("Zadaná hodnota není typu DateTime");
-                                    break;
+                                    continue;
                                 }
                                 if (od < DateTime.Now)
                                 {
                                     Console.WriteLine("Zadaná hodnota nesmí být v minulosti");
-                                    break;
+                                    continue;
                                 }
+                                break;
                             }
                             DateTime @do;
                             while (true)
                             {
                                 Console.Write("Do: ");
-                                if (DateTime.TryParse(Console.ReadLine(), out @do))
+                                if (!DateTime.TryParse(Console.ReadLine(), out @do))
                                 {
                                     Console.WriteLine("Zadaná hodnota není typu DateTime");
-                                    break;
+                                    continue;
                                 }
                                 if (@do < DateTime.Now)
                                 {
                                     Console.WriteLine("Zadaná hodnota nesmí být v minulosti");
-                                    break;
+                                    continue;
                                 }
                                 if (@do < od)
                                 {
                                     Console.WriteLine("Zadaná hodnota musí být větší než hodnota Od");
-                                    break;
+                                    continue;
                                 }
+                                break;
                             }
 
                             List<Auto> volnaAuta = databaze.VolnaAuta(od, @do);
@@ -143,20 +146,26 @@ namespace VozovyPark
                                 Console.WriteLine(auto);
                             }
 
-                            int carId;
+                            int idAuta;
                             while (true)
                             {
-                                Console.WriteLine("Zvolte auto:");
-                                if (int.TryParse(Console.ReadLine(), out carId))
-                                {
-                                    //TODO: if carId is valid
-                                    break;
-                                }
-                                else
+                                Console.Write("Zadejte id auta: ");
+                                if (!int.TryParse(Console.ReadLine(), out idAuta))
                                 {
                                     Console.WriteLine("Zadaná hodnota musí být číslo");
+                                    continue;
                                 }
+
+                                if (volnaAuta.Where(a => a.Uid == idAuta).FirstOrDefault() == null)
+                                {
+                                    Console.WriteLine("Id auta musí být jedno z vypsaných výše");
+                                    continue;
+                                }
+
+                                break;
                             }
+
+                            databaze.PridatRezervaci(uzivatel.Uid, idAuta, od, @do);
 
                             break;
 
@@ -169,7 +178,7 @@ namespace VozovyPark
                             Console.WriteLine(napoveda);
                             break;
 
-                        case "odhlasit-se":
+                        case "odhlasit se":
                         case "exit":
                         case "konec":
                             exit = true;
