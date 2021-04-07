@@ -23,6 +23,9 @@ namespace VozovyPark
         public static void Main(string[] args)
         {
 
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelHandler);
+
+
             //WRITING TEST
             //databaze = new Databaze();
             //databaze.UlozDatabazi();
@@ -40,9 +43,7 @@ namespace VozovyPark
 
 
 
-
-
-            uzivatel = Prihlaseni();
+            Prihlaseni();
 
             bool exit = false;
             while (!exit)
@@ -188,28 +189,34 @@ namespace VozovyPark
         }
 
 
-        private static Uzivatel Prihlaseni()
+        private static void Prihlaseni()
         {
 
             while (true)
             {
                 Console.Write("Email: ");
                 string email = Console.ReadLine();
+
                 Console.Write("Heslo: ");
                 string hash = NactiHeslo();
                 Console.WriteLine();
 
-                Uzivatel uzivatel = databaze.Prihlaseni(email, hash);
+                uzivatel = databaze.Prihlaseni(email, hash);
 
                 if (uzivatel == null)
                 {
                     Console.WriteLine("Neplatné přihlašovací údaje");
                     continue;
                 }
+                
 
-                //TODO: nutna zmena hesla
+                if (uzivatel.NutnaZmenaHesla)
+                {
+                    Console.WriteLine("Nutná změna hesla");
+                    ZmenaHesla();
+                }
 
-                return uzivatel;
+                return;
             }
         }
 
@@ -286,6 +293,11 @@ namespace VozovyPark
                 }
             }
             return password;
+        }
+
+        protected static void CancelHandler(object sender, ConsoleCancelEventArgs args)
+        {
+            databaze.UlozDatabazi();
         }
     }
 }

@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 namespace VozovyPark
 {
 
-    //[XmlRoot(ElementName = "Databaze")]
     [DataContract]
     public class Databaze
     {
@@ -22,6 +21,8 @@ namespace VozovyPark
         [DataMember(Name = "rezervace")]
         private List<Rezervace> rezervace = new List<Rezervace>();
 
+        [DataMember(Name = "uid")]
+        private UID uid;
 
         public void Test ()
         {
@@ -30,9 +31,11 @@ namespace VozovyPark
 
         public Databaze()
         {
+            uid = new UID();
+
             //TODO: remove
-            uzivatele.Add(new Uzivatel("admin@admin.admin", "admin", "admin", "---", true, false));
-            uzivatele.Add(new Uzivatel("jan@novak.cz", "Jan", "Novák", "---", false, true));
+            uzivatele.Add(new Uzivatel("admin", "admin", "admin", "GV5oi3Tqi6jIqWedll18JU+Tqg78XAKRMKBmvCoVM2KgcBu8", true, false));
+            uzivatele.Add(new Uzivatel("jan@novak.cz", "Jan", "Novák", "s1XjDjLdvqWrI8QzePYY2THm6ltay3umV9eef1JB2HUjWZc7", false, true));
 
             auta.Add(new Auto("Škoda", "Octavia", TypAuta.Osobni, 4.5));
             auta.Add(new Auto("Neco", "neco", TypAuta.Nakladni, 5.1));
@@ -50,11 +53,7 @@ namespace VozovyPark
 
         public bool JeEmailUnikatni(string email)
         {
-            foreach (Uzivatel uzivatel in uzivatele)
-            {
-                if (uzivatel.Email == email) return false;
-            }
-            return true;
+            return uzivatele.Where(u => u.Email == email).FirstOrDefault() == null;
         }
 
 

@@ -100,6 +100,7 @@ namespace VozovyPark
         public void ZmenitHeslo (string noveHeslo)
         {
             this.hash = Hash(noveHeslo);
+            this.NutnaZmenaHesla= false;
         }
     }
 }

@@ -1,19 +1,33 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace VozovyPark
 {
-    public static class UID
+    [DataContract]
+    public class UID
     {
-        private static Dictionary<System.Type, int> ids = new Dictionary<System.Type, int>();
+        private static UID instance;
+
+        [DataMember(Name = "ids")]
+        private Dictionary<string, int> ids = new Dictionary<string, int>();
+
+        public UID () 
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+        }
 
         public static int newUID<T>()
         {
-            if (!ids.ContainsKey(typeof(T)))
+            string type = typeof(T).ToString();
+            if (!instance.ids.ContainsKey(type))
             {
-                ids.Add(typeof(T), 0);
+                instance.ids.Add(type, 0);
             }
-            return ++ids[typeof(T)];
+            return ++instance.ids[type];
         }
     }
 }
