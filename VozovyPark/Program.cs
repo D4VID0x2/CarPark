@@ -12,9 +12,15 @@ namespace VozovyPark
                                         "zmenit heslo\n" +
                                         "odhlasit se | exit | konec";
 
-        private const string adminNapoveda = "reservations [list|add|cancel]\n" +
-                                             "changepassword\n" +
-                                             "logout";
+        private const string adminNapoveda = "pridat uzivatele\n" +
+                                             "odebrat uzivatele\n" +
+                                             "pridat auto\n" +
+                                             "odebrat auto\n" +
+                                             "pridat rezervaci\n" +
+                                             "odebrat rezervaci\n" +
+                                             "seznam rezervaci\n" +
+                                             "zmenit heslo\n" +
+                                             "odhlasit se | exit | konec";
 
 
         private static Uzivatel uzivatel = null;
