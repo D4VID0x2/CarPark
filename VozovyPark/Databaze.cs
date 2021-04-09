@@ -24,7 +24,7 @@ namespace VozovyPark
         [DataMember(Name = "uid")]
         public UID uid;
 
-        public void Test ()
+        public void Test()
         {
             Console.WriteLine(uzivatele.Count);
         }
@@ -84,7 +84,7 @@ namespace VozovyPark
             return true;
         }
 
-        public bool OdebratRezervaci (int id)
+        public bool OdebratRezervaci(int id)
         {
 
             Rezervace rez = rezervace.Where(r => r.Uid == id).FirstOrDefault();
@@ -143,7 +143,7 @@ namespace VozovyPark
             uzivatele.Add(new Uzivatel(email, jmeno, prijmeni, hash, admin));
         }
 
-        public bool VynutitZmenuHesla (int idUzivatele)
+        public bool VynutitZmenuHesla(int idUzivatele)
         {
             Uzivatel uzivatel = uzivatele.Where(u => u.Uid == idUzivatele).FirstOrDefault();
             if (uzivatel == null)
@@ -154,6 +154,46 @@ namespace VozovyPark
             uzivatel.VynutitZmenuHesla();
 
             return true;
+        }
+
+        public bool OdebratUzivatele(int idUzivatele)
+        {
+            Uzivatel uzivatel = uzivatele.Where(u => u.Uid == idUzivatele).FirstOrDefault();
+            if (uzivatel == null)
+            {
+                return false;
+            }
+
+            List<Rezervace> rezervaceUzivatele = VsechnyRezervace(idUzivatele);
+            if (rezervaceUzivatele.Count > 0) // pokud tento uzivatel ma budouci rezervace
+            {
+                return false;
+            }
+
+            uzivatele.Remove(uzivatel);
+
+            return true;
+        }
+
+
+        public bool OdebratAuto(int idAuta)
+        {
+            Auto auto = auta.Where(a => a.Uid == idAuta).FirstOrDefault();
+            if (auto == null)
+            {
+                return false;
+            }
+
+            List<Rezervace> rezervaceAuta = VsechnyRezervacePodleAuta(idAuta);
+            if (rezervaceAuta.Count > 0) // pokud toto auto ma budouci rezervace
+            {
+                return false;
+            }
+
+            auta.Remove(auto);
+
+            return true;
+
         }
 
 
@@ -185,7 +225,7 @@ namespace VozovyPark
             {
                 using (XmlReader xr = XmlReader.Create(sr))
                 {
-                    Databaze db = (Databaze) xmlSerializer.ReadObject(xr);
+                    Databaze db = (Databaze)xmlSerializer.ReadObject(xr);
                     UID.instance = db.uid;
                     return db;
                 }

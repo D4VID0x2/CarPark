@@ -36,21 +36,7 @@ namespace VozovyPark
             Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelHandler);
 
 
-            //WRITING TEST
-            //databaze = new Databaze();
-            //databaze.UlozDatabazi();
-
-
-            //READING TEST
-
             databaze = Databaze.NactiDatabazi();
-
-            //databaze.Test();
-
-            //Console.WriteLine(Uzivatel.Hash("heslo"));
-
-            //return;
-
 
 
             Prihlaseni();
@@ -175,6 +161,33 @@ namespace VozovyPark
                                     goto loop;
                                 }
                                 Console.WriteLine("Uživatel bude při dalším přihlášení vynucen si změnit heslo");
+                                break;
+                            }
+
+                        case "odebrat uzivatele":
+                            {
+
+                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
+
+                                if (!databaze.OdebratUzivatele(idUzivatele))
+                                {
+                                    Console.WriteLine("Chyba: Zadané ID uživatle neexistuje nebo se nepodařilo uživatele odstraňit, protože má budoucí rezervace");
+                                    goto loop;
+                                }
+                                Console.WriteLine("Uživatel byl úspěšně odebrán");
+                                break;
+                            }
+                        case "odebrat auto":
+                            {
+
+                                int idAuta = NactiCislo("Zadejte ID auta: ");
+
+                                if (!databaze.OdebratUzivatele(idAuta))
+                                {
+                                    Console.WriteLine("Chyba: Zadané ID auta neexistuje nebo se nepodařilo auto odstraňit, protože má budoucí rezervace");
+                                    goto loop;
+                                }
+                                Console.WriteLine("Auto bylo úspěšně odebráno");
                                 break;
                             }
 
