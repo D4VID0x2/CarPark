@@ -102,5 +102,17 @@ namespace VozovyPark
             this.hash = Hash(noveHeslo);
             this.NutnaZmenaHesla= false;
         }
+
+
+        public void AktualizovatDatumPrihlaseni(DateTime now)
+        {
+            PosledniPrihlaseni = now;
+        }
+
+
+        public override string ToString()
+        {
+            return string.Format("#{0}: {0} {1}", Uid, Jmeno, Prijmeni);
+        }
     }
 }

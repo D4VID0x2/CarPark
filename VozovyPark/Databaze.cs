@@ -50,6 +50,11 @@ namespace VozovyPark
             return rezervace.FindAll(r => r.Auto == auto);
         }
 
+        public List<Uzivatel> VsichniUzivatele()
+        {
+            return uzivatele;
+        }
+
 
         public bool JeEmailUnikatni(string email)
         {
