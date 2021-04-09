@@ -54,6 +54,10 @@ namespace VozovyPark
         {
             return uzivatele;
         }
+        public List<Auto> VsechnaAuta()
+        {
+            return auta;
+        }
 
 
         public bool JeEmailUnikatni(string email)
@@ -193,7 +197,6 @@ namespace VozovyPark
             auta.Remove(auto);
 
             return true;
-
         }
 
 

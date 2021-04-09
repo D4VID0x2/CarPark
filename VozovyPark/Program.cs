@@ -21,7 +21,9 @@ namespace VozovyPark
                                              "  odebrat auto\n" +
                                              "  pridat rezervaci\n" +
                                              "  odebrat rezervaci\n" +
-                                             "  seznam rezervaci\n" +
+                                             "  seznam rezervaci podle uzivatele\n" +
+                                             "  seznam rezervaci podle auta\n" +
+                                             "  seznam aut\n" +
                                              "  zmenit heslo\n" +
                                              "  odhlasit se | exit | konec";
 
@@ -190,6 +192,72 @@ namespace VozovyPark
                                 Console.WriteLine("Auto bylo úspěšně odebráno");
                                 break;
                             }
+
+                        case "seznam rezervaci podle uzivatele":
+                            {
+
+                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
+
+                                bool vypsatStare = NactiAnoNe("Vypsat i staré rezervace");
+
+                                foreach (Rezervace rezervace in databaze.VsechnyRezervace(idUzivatele, vypsatStare))
+                                {
+                                    Console.WriteLine(rezervace);
+                                }
+                                break;
+                            }
+
+                        case "seznam rezervaci podle auta":
+                            {
+
+                                int idAuta = NactiCislo("Zadejte ID auta: ");
+
+                                bool vypsatStare = NactiAnoNe("Vypsat i staré rezervace");
+
+                                foreach (Rezervace rezervace in databaze.VsechnyRezervacePodleAuta(idAuta, vypsatStare))
+                                {
+                                    Console.WriteLine(rezervace);
+                                }
+                                break;
+
+                            }
+
+                        case "seznam uzivatelu":
+                            foreach (Uzivatel uzivatel in databaze.VsichniUzivatele())
+                            {
+                                Console.WriteLine(uzivatel.ToStringLong());
+                            }
+                            break;
+
+                        case "seznam aut":
+                            foreach (Auto auto in databaze.VsechnaAuta())
+                            {
+                                Console.WriteLine(auto);
+                            }
+                            break;
+
+                        case "pridat auto":
+                            Console.Write("Zadejte značku: ");
+                            string znacka = Console.ReadLine();
+                            Console.Write("Zadejte model: ");
+                            string model = Console.ReadLine();
+                            Console.Write("Typy aut:\n  1: osobní\n  2: nákladní");
+                            int zadanyTyp = NactiCislo("Zadejte typ auta: ");
+
+                            if (!Enum.IsDefined(typeof(TypAuta), zadanyTyp))
+                            {
+                                Console.WriteLine("Chyba: Zadaný typ auta neexistuje");
+                                goto loop;
+                            }
+                            TypAuta typ = (TypAuta)zadanyTyp;
+
+                            double spotreba = NactiDouble("Zadejte spotřebu na 100km: ");
+
+                            databaze.PridatAuto(znacka, model, typ, spotreba);
+
+                            Console.WriteLine("Auto úspěšně přidáno");
+
+                            break;
 
                         case "napoveda":
                         case "?":
@@ -455,10 +523,24 @@ namespace VozovyPark
                     Console.WriteLine("Zadaná hodnota musí být číslo");
                     continue;
                 }
-
                 break;
             }
+            return cislo;
+        }
 
+        public static double NactiDouble(string vyzva)
+        {
+            double cislo;
+            while (true)
+            {
+                Console.Write(vyzva);
+                if (!double.TryParse(Console.ReadLine(), out cislo))
+                {
+                    Console.WriteLine("Zadaná hodnota musí být číslo");
+                    continue;
+                }
+                break;
+            }
             return cislo;
         }
 

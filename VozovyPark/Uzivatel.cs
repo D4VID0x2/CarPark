@@ -117,7 +117,11 @@ namespace VozovyPark
 
         public override string ToString()
         {
-            return string.Format("#{0}: {0} {1}", Uid, Jmeno, Prijmeni);
+            return string.Format("#{0}: {1} {2}", Uid, Jmeno, Prijmeni);
+        }
+        public string ToStringLong()
+        {
+            return string.Format("#{0}:\n  Email: {1}\n  Jméno: {2}\n  Příjmení: {3}\n  Je admin?: {4}\n  Poslední přihlášení: {5}", Uid, Email, Jmeno, Prijmeni, JeAdmin ? "Ano" : "Ne", PosledniPrihlaseni);
         }
     }
 }

@@ -43,9 +43,7 @@ namespace VozovyPark
 
     public enum TypAuta
     {
-        Osobni,
-        Nakladni,
-        Obytne,
-        Kamion
+        Osobni = 1,
+        Nakladni = 2,
     }
 }
