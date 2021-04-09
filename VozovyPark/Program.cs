@@ -8,22 +8,22 @@ namespace VozovyPark
     {
 
         private const string napoveda = "Použijte jeden z následujících příkazů:\n" +
-                                        "seznam rezervaci\n" +
-                                        "pridat rezervaci\n" +
-                                        "odebrat rezervaci\n" +
-                                        "zmenit heslo\n" +
-                                        "odhlasit se | exit | konec";
+                                        "  seznam rezervaci\n" +
+                                        "  pridat rezervaci\n" +
+                                        "  odebrat rezervaci\n" +
+                                        "  zmenit heslo\n" +
+                                        "  odhlasit se | exit | konec";
 
         private const string adminNapoveda = "Použijte jeden z následujících příkazů:\n" +
-                                             "pridat uzivatele\n" +
-                                             "odebrat uzivatele\n" +
-                                             "pridat auto\n" +
-                                             "odebrat auto\n" +
-                                             "pridat rezervaci\n" +
-                                             "odebrat rezervaci\n" +
-                                             "seznam rezervaci\n" +
-                                             "zmenit heslo\n" +
-                                             "odhlasit se | exit | konec";
+                                             "  pridat uzivatele\n" +
+                                             "  odebrat uzivatele\n" +
+                                             "  pridat auto\n" +
+                                             "  odebrat auto\n" +
+                                             "  pridat rezervaci\n" +
+                                             "  odebrat rezervaci\n" +
+                                             "  seznam rezervaci\n" +
+                                             "  zmenit heslo\n" +
+                                             "  odhlasit se | exit | konec";
 
 
         private static Uzivatel uzivatel = null;
@@ -73,62 +73,110 @@ namespace VozovyPark
                             break;
 
                         case "pridat rezervaci":
-
-                            DateTime od = NactiDatum("Od: ");
-                            DateTime @do = NactiDatum("Do: ");
-                            if (@do < od)
                             {
-                                Console.WriteLine("Chyba: Zadaná hodnota Do nesmí být větší než hodnota Od");
-                                goto loop;
-                            }
-
-                            List<Auto> volnaAuta = databaze.VolnaAuta(od, @do);
-
-                            Console.WriteLine("Volná auta:");
-                            foreach (Auto auto in volnaAuta)
-                            {
-                                Console.WriteLine(auto);
-                            }
-
-
-
-
-                            int idAuta = NactiCislo("Zadejte ID auta: ");
-
-                            if (volnaAuta.Where(a => a.Uid == idAuta).FirstOrDefault() == null)
-                            {
-                                Console.WriteLine("Chyba: Zadané ID auta neexistuje nebo není dostupné");
-                                goto loop;
-                            }
-
-
-
-                            List<Uzivatel> uzivatele = databaze.VsichniUzivatele();
-
-                            Console.Write("Vypsat všechny uživatele? (y|N) ");
-                            char vypsatUzivatele = Console.ReadKey().KeyChar;
-
-                            if (char.ToLower(vypsatUzivatele) == 'y')
-                            {
-                                foreach (Uzivatel uzivatel in uzivatele)
+                                DateTime od = NactiDatum("Od: ");
+                                DateTime @do = NactiDatum("Do: ");
+                                if (@do < od)
                                 {
-                                    Console.WriteLine(uzivatel);
+                                    Console.WriteLine("Chyba: Zadaná hodnota Do nesmí být větší než hodnota Od");
+                                    goto loop;
                                 }
+
+                                List<Auto> volnaAuta = databaze.VolnaAuta(od, @do);
+
+                                Console.WriteLine("Volná auta:");
+                                foreach (Auto auto in volnaAuta)
+                                {
+                                    Console.WriteLine(auto);
+                                }
+
+                                int idAuta = NactiCislo("Zadejte ID auta: ");
+
+                                if (volnaAuta.Where(a => a.Uid == idAuta).FirstOrDefault() == null)
+                                {
+                                    Console.WriteLine("Chyba: Zadané ID auta neexistuje nebo není dostupné");
+                                    goto loop;
+                                }
+
+
+
+                                List<Uzivatel> uzivatele = databaze.VsichniUzivatele();
+
+                                bool vypsatUzivatele = NactiAnoNe("Vypsat všechny uživatele");
+
+                                if (vypsatUzivatele)
+                                {
+                                    foreach (Uzivatel uzivatel in uzivatele)
+                                    {
+                                        Console.WriteLine(uzivatel);
+                                    }
+                                }
+
+                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
+
+                                if (uzivatele.Where(u => u.Uid == idUzivatele).FirstOrDefault() == null)
+                                {
+                                    Console.WriteLine("Chyba: Zadané ID uzivatle neexistuje");
+                                    goto loop;
+                                }
+
+                                databaze.PridatRezervaci(idUzivatele, idAuta, od, @do);
+
+                                Console.WriteLine("Rezervace úspěšně přidána");
+
+                                break;
                             }
 
-                            int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
-
-                            if (uzivatele.Where(u => u.Uid == idUzivatele).FirstOrDefault() == null)
+                        case "pridat uzivatele":
                             {
-                                Console.WriteLine("Chyba: Zadané ID uzivatle neexistuje");
-                                goto loop;
+
+                                Console.Write("Zadejte email: ");
+                                string email = Console.ReadLine();
+                                Console.Write("Zadejte jméno: ");
+                                string jmeno = Console.ReadLine();
+                                Console.Write("Zadejte příjmení: ");
+                                string prijmeni = Console.ReadLine();
+                                bool admin = NactiAnoNe("Je admin");
+
+                                string heslo = "";
+                                while (true)
+                                {
+                                    Console.Write("Zadejte uživatelovo heslo: ");
+                                    heslo = NactiHeslo();
+                                    Console.WriteLine();
+                                    if (heslo == "") continue;
+
+                                    Console.Write("Potvrďte uživatelovo heslo: ");
+                                    string potvrzeniHesla = NactiHeslo();
+                                    Console.WriteLine();
+
+                                    if (heslo != potvrzeniHesla)
+                                    {
+                                        Console.WriteLine("Hesla nejsou stejná");
+                                        continue;
+                                    }
+
+                                    break;
+                                }
+
+                                databaze.PridatUzivatele(email, jmeno, prijmeni, admin, Uzivatel.Hash(heslo));
+
+                                break;
                             }
 
-                            databaze.PridatRezervaci(idUzivatele, idAuta, od, @do);
+                        case "vynutit zmenu hesla":
+                            {
 
-                            Console.WriteLine("Rezervace úspěšně přidána");
+                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
 
-                            break;
+                                if (!databaze.VynutitZmenuHesla(idUzivatele))
+                                {
+                                    Console.WriteLine("Chyba: Zadané ID uzivatle neexistuje");
+                                    goto loop;
+                                }
+                                Console.WriteLine("Uživatel bude při dalším přihlášení vynucen si změnit heslo");
+                                break;
+                            }
 
                         case "napoveda":
                         case "?":
@@ -148,9 +196,11 @@ namespace VozovyPark
                     }
 
                 }
+
+
+
                 else
                 {
-
                     Console.Write("$ ");
                     string cmd = Console.ReadLine().Trim().ToLower();
 
@@ -159,7 +209,10 @@ namespace VozovyPark
                     switch (cmd)
                     {
                         case "seznam rezervaci":
-                            foreach (Rezervace rezervace in databaze.VsechnyRezervace(uzivatel.Uid))
+
+                            bool vypsatStare = NactiAnoNe("Vypsat i staré rezervace");
+
+                            foreach (Rezervace rezervace in databaze.VsechnyRezervace(uzivatel.Uid, vypsatStare))
                             {
                                 Console.WriteLine(rezervace);
                             }
@@ -183,28 +236,32 @@ namespace VozovyPark
                                 Console.WriteLine(auto);
                             }
 
-                            int idAuta;
-                            while (true)
+                            int idAuta = NactiCislo("Zadejte ID auta: ");
+
+                            if (volnaAuta.Where(a => a.Uid == idAuta).FirstOrDefault() == null)
                             {
-                                Console.Write("Zadejte id auta: ");
-                                if (!int.TryParse(Console.ReadLine(), out idAuta))
-                                {
-                                    Console.WriteLine("Zadaná hodnota musí být číslo");
-                                    continue;
-                                }
-
-                                if (volnaAuta.Where(a => a.Uid == idAuta).FirstOrDefault() == null)
-                                {
-                                    Console.WriteLine("Chyba: Zadané ID auta neexistuje nebo není dostupné");
-                                    goto loop;
-                                }
-
-                                break;
+                                Console.WriteLine("Chyba: Zadané ID auta neexistuje nebo není dostupné");
+                                goto loop;
                             }
 
                             databaze.PridatRezervaci(uzivatel.Uid, idAuta, od, @do);
 
                             Console.WriteLine("Rezervace úspěšně přidána");
+
+                            break;
+
+                        case "odebrat rezervaci":
+
+                            int idRezervace = NactiCislo("Zadejte ID rezervace: ");
+
+                            if (!databaze.OdebratRezervaci(idRezervace))
+                            {
+                                Console.WriteLine("Chyba: Zadané ID rezervace neexistuje nebo je pro starou rezervaci");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Rezervace úspěšně odebrána");
+                            }
 
                             break;
 
@@ -262,8 +319,8 @@ namespace VozovyPark
                     ZmenaHesla();
                 }
 
-                Console.WriteLine("Přihlášen jako {0} {1})", uzivatel.Jmeno, uzivatel.Prijmeni);
-                Console.WriteLine("Poslední přihlášení: {0})", uzivatel.PosledniPrihlaseni);
+                Console.WriteLine("Přihlášen jako {0} {1}", uzivatel.Jmeno, uzivatel.Prijmeni);
+                Console.WriteLine("Poslední přihlášení: {0}", uzivatel.PosledniPrihlaseni);
 
                 uzivatel.AktualizovatDatumPrihlaseni(DateTime.Now);
 
@@ -319,8 +376,13 @@ namespace VozovyPark
         }
 
 
-        public static string NactiHeslo()
+        public static string NactiHeslo(string prompt = "")
         {
+            if (prompt != "")
+            {
+                Console.Write(prompt);
+            }
+
             string password = "";
             while (true)
             {
@@ -385,6 +447,14 @@ namespace VozovyPark
             }
 
             return cislo;
+        }
+
+        public static bool NactiAnoNe(string vyzva)
+        {
+            Console.Write("{0}? (a|N)", vyzva);
+            char ch = char.ToLower(Console.ReadKey().KeyChar);
+            Console.WriteLine();
+            return ch == 'a';
         }
 
         protected static void CancelHandler(object sender, ConsoleCancelEventArgs args)

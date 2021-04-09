@@ -109,6 +109,11 @@ namespace VozovyPark
             PosledniPrihlaseni = now;
         }
 
+        public void VynutitZmenuHesla ()
+        {
+            NutnaZmenaHesla = true;
+        }
+
 
         public override string ToString()
         {

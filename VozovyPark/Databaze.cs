@@ -41,13 +41,13 @@ namespace VozovyPark
             auta.Add(new Auto("Neco", "neco", TypAuta.Nakladni, 5.1));
         }
 
-        public List<Rezervace> VsechnyRezervace(int uzivatel)
+        public List<Rezervace> VsechnyRezervace(int uzivatel, bool vsechny = false)
         {
-            return rezervace.FindAll(r => r.Uzivatel == uzivatel);
+            return rezervace.FindAll(r => r.Uzivatel == uzivatel && (r.Od > DateTime.Now || vsechny));
         }
-        public List<Rezervace> VsechnyRezervacePodleAuta(int auto)
+        public List<Rezervace> VsechnyRezervacePodleAuta(int auto, bool vsechny = false)
         {
-            return rezervace.FindAll(r => r.Auto == auto);
+            return rezervace.FindAll(r => r.Auto == auto && (r.Od > DateTime.Now || vsechny));
         }
 
         public List<Uzivatel> VsichniUzivatele()
@@ -79,8 +79,22 @@ namespace VozovyPark
 
         public bool PridatRezervaci(int uzivatel, int auto, DateTime od, DateTime @do)
         {
-
             rezervace.Add(new Rezervace(uzivatel, auto, od, @do));
+
+            return true;
+        }
+
+        public bool OdebratRezervaci (int id)
+        {
+
+            Rezervace rez = rezervace.Where(r => r.Uid == id).FirstOrDefault();
+
+            if (rez == null)
+            {
+                return false;
+            }
+
+            rezervace.Remove(rez);
 
             return true;
         }
@@ -124,6 +138,23 @@ namespace VozovyPark
             auta.Add(new Auto(znacka, model, typ, spotreba));
         }
 
+        public void PridatUzivatele(string email, string jmeno, string prijmeni, bool admin, string hash)
+        {
+            uzivatele.Add(new Uzivatel(email, jmeno, prijmeni, hash, admin));
+        }
+
+        public bool VynutitZmenuHesla (int idUzivatele)
+        {
+            Uzivatel uzivatel = uzivatele.Where(u => u.Uid == idUzivatele).FirstOrDefault();
+            if (uzivatel == null)
+            {
+                return false;
+            }
+
+            uzivatel.VynutitZmenuHesla();
+
+            return true;
+        }
 
 
 
