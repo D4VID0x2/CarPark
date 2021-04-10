@@ -77,7 +77,7 @@ namespace VozovyPark
                                 Console.WriteLine("Volná auta:");
                                 foreach (Auto auto in volnaAuta)
                                 {
-                                    Console.WriteLine(auto);
+                                    Console.WriteLine(auto.ToStringLong());
                                 }
 
                                 int idAuta = NactiCislo("Zadejte ID auta: ");
@@ -193,7 +193,7 @@ namespace VozovyPark
 
                                 int idAuta = NactiCislo("Zadejte ID auta: ");
 
-                                if (!databaze.OdebratUzivatele(idAuta))
+                                if (!databaze.OdebratAuto(idAuta))
                                 {
                                     Console.WriteLine("Chyba: Zadané ID auta neexistuje nebo se nepodařilo auto odstraňit, protože má budoucí rezervace");
                                     goto loop;

@@ -132,17 +132,22 @@ namespace VozovyPark
                 bool jeVolne = true;
                 foreach (Rezervace r in VsechnyRezervacePodleAuta(auto.Uid))
                 {
-                    if (r.Od < od && r.Do > od && r.Do < @do) // beginning overlaps
+                    if (od >= r.Od && od <= r.Do) 
                     {
                         jeVolne = false;
                         break;
                     }
-                    if (r.Od > od && r.Od < @do && r.Do > od && r.Do < @do) // middle overlaps
+                    if (@do >= r.Od && @do <= r.Do) 
                     {
                         jeVolne = false;
                         break;
                     }
-                    if (r.Od < od && r.Od > @do && r.Do > @do) // end overlaps
+                    if (r.Od >= od && r.Od <= @do) 
+                    {
+                        jeVolne = false;
+                        break;
+                    }
+                    if (r.Do >= od && r.Do <= @do) 
                     {
                         jeVolne = false;
                         break;
