@@ -31,7 +31,7 @@ namespace VozovyPark
 
         public override string ToString()
         {
-            return string.Format("#{0}:\n  \tAuto: {1}\n  \tOd: {2}\n  \tDo: {3}\n", this.Uid, this.Auto, this.Od, this.Od);
+            return string.Format("#{0}:\n  Auto: {1}\n  Uživatel: {2}\n  Od: {3}\n  Do: {4}\n", this.Uid, Databaze.instance.Auto(this.Auto), Databaze.instance.Uzivatel(this.Uzivatel), this.Od, this.Do);
         }
 
     }

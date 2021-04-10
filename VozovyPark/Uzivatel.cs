@@ -117,7 +117,7 @@ namespace VozovyPark
 
         public override string ToString()
         {
-            return string.Format("#{0}: {1} {2}", Uid, Jmeno, Prijmeni);
+            return string.Format("{0} {1}", Jmeno, Prijmeni);
         }
         public string ToStringLong()
         {

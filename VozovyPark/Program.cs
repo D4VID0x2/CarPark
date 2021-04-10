@@ -17,13 +17,14 @@ namespace VozovyPark
         private const string adminNapoveda = "Použijte jeden z následujících příkazů:\n" +
                                              "  pridat uzivatele\n" +
                                              "  odebrat uzivatele\n" +
+                                             "  seznam uzivatelu\n" +
                                              "  pridat auto\n" +
                                              "  odebrat auto\n" +
+                                             "  seznam aut\n" +
                                              "  pridat rezervaci\n" +
                                              "  odebrat rezervaci\n" +
                                              "  seznam rezervaci podle uzivatele\n" +
                                              "  seznam rezervaci podle auta\n" +
-                                             "  seznam aut\n" +
                                              "  zmenit heslo\n" +
                                              "  odhlasit se | exit | konec";
 
@@ -39,6 +40,7 @@ namespace VozovyPark
 
 
             databaze = Databaze.NactiDatabazi();
+            Databaze.instance = databaze;
 
 
             Prihlaseni();
@@ -120,6 +122,11 @@ namespace VozovyPark
 
                                 Console.Write("Zadejte email: ");
                                 string email = Console.ReadLine();
+                                if (!databaze.JeEmailUnikatni(email))
+                                {
+                                    Console.WriteLine("Chyba: email už v systému existuje");
+                                    goto loop;
+                                }
                                 Console.Write("Zadejte jméno: ");
                                 string jmeno = Console.ReadLine();
                                 Console.Write("Zadejte příjmení: ");
@@ -148,6 +155,8 @@ namespace VozovyPark
                                 }
 
                                 databaze.PridatUzivatele(email, jmeno, prijmeni, admin, Uzivatel.Hash(heslo));
+
+                                Console.WriteLine("Uživatel byl úspěšně přidán");
 
                                 break;
                             }
@@ -232,7 +241,7 @@ namespace VozovyPark
                         case "seznam aut":
                             foreach (Auto auto in databaze.VsechnaAuta())
                             {
-                                Console.WriteLine(auto);
+                                Console.WriteLine(auto.ToStringLong());
                             }
                             break;
 
@@ -256,6 +265,21 @@ namespace VozovyPark
                             databaze.PridatAuto(znacka, model, typ, spotreba);
 
                             Console.WriteLine("Auto úspěšně přidáno");
+
+                            break;
+
+                        case "odebrat rezervaci":
+
+                            int idRezervace = NactiCislo("Zadejte ID rezervace: ");
+
+                            if (!databaze.OdebratRezervaci(idRezervace, uzivatel.Uid))
+                            {
+                                Console.WriteLine("Chyba: Zadané ID rezervace neexistuje nebo je pro starou rezervaci");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Rezervace úspěšně odebrána");
+                            }
 
                             break;
 
@@ -314,7 +338,7 @@ namespace VozovyPark
                             Console.WriteLine("Volná auta:");
                             foreach (Auto auto in volnaAuta)
                             {
-                                Console.WriteLine(auto);
+                                Console.WriteLine(auto.ToStringLong());
                             }
 
                             int idAuta = NactiCislo("Zadejte ID auta: ");
@@ -335,7 +359,7 @@ namespace VozovyPark
 
                             int idRezervace = NactiCislo("Zadejte ID rezervace: ");
 
-                            if (!databaze.OdebratRezervaci(idRezervace))
+                            if (!databaze.OdebratRezervaci(idRezervace, uzivatel.Uid))
                             {
                                 Console.WriteLine("Chyba: Zadané ID rezervace neexistuje nebo je pro starou rezervaci");
                             }

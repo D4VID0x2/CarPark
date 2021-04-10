@@ -14,6 +14,8 @@ namespace VozovyPark
     {
         private const string jmenoSouboru = "databaze.xml";
 
+        public static Databaze instance;
+
         [DataMember(Name = "uzivatele")]
         private List<Uzivatel> uzivatele = new List<Uzivatel>();
         [DataMember(Name = "auta")]
@@ -24,21 +26,31 @@ namespace VozovyPark
         [DataMember(Name = "uid")]
         public UID uid;
 
-        public void Test()
+
+        //public Databaze()
+        //{
+        //uid = new UID();
+
+        ////TODO: remove
+        //uzivatele.Add(new Uzivatel("admin", "admin", "admin", "GV5oi3Tqi6jIqWedll18JU+Tqg78XAKRMKBmvCoVM2KgcBu8", true, false));
+        //uzivatele.Add(new Uzivatel("jan@novak.cz", "Jan", "Novák", "s1XjDjLdvqWrI8QzePYY2THm6ltay3umV9eef1JB2HUjWZc7", false, true));
+
+        //auta.Add(new Auto("Škoda", "Octavia", TypAuta.Osobni, 4.5));
+        //auta.Add(new Auto("Neco", "neco", TypAuta.Nakladni, 5.1));
+        //}
+
+
+        public Auto Auto(int id)
         {
-            Console.WriteLine(uzivatele.Count);
+            return auta.Where(a => a.Uid == id).FirstOrDefault();
         }
-
-        public Databaze()
+        public Uzivatel Uzivatel(int id)
         {
-            uid = new UID();
-
-            //TODO: remove
-            uzivatele.Add(new Uzivatel("admin", "admin", "admin", "GV5oi3Tqi6jIqWedll18JU+Tqg78XAKRMKBmvCoVM2KgcBu8", true, false));
-            uzivatele.Add(new Uzivatel("jan@novak.cz", "Jan", "Novák", "s1XjDjLdvqWrI8QzePYY2THm6ltay3umV9eef1JB2HUjWZc7", false, true));
-
-            auta.Add(new Auto("Škoda", "Octavia", TypAuta.Osobni, 4.5));
-            auta.Add(new Auto("Neco", "neco", TypAuta.Nakladni, 5.1));
+            return uzivatele.Where(u => u.Uid == id).FirstOrDefault();
+        }
+        public Rezervace Rezervace(int id)
+        {
+            return rezervace.Where(r => r.Uid == id).FirstOrDefault();
         }
 
         public List<Rezervace> VsechnyRezervace(int uzivatel, bool vsechny = false)
@@ -88,17 +100,25 @@ namespace VozovyPark
             return true;
         }
 
-        public bool OdebratRezervaci(int id)
+        public bool OdebratRezervaci(int idRezervace, int idUzivatele)
         {
 
-            Rezervace rez = rezervace.Where(r => r.Uid == id).FirstOrDefault();
+            Rezervace rez = rezervace.Where(r => r.Uid == idRezervace).FirstOrDefault();
 
             if (rez == null)
             {
                 return false;
             }
 
-            rezervace.Remove(rez);
+            if (rez.Uzivatel == idUzivatele || Uzivatel(idUzivatele).JeAdmin)
+            {
+                rezervace.Remove(rez);
+            }
+            else
+            {
+                return false;
+            }
+
 
             return true;
         }
@@ -208,7 +228,7 @@ namespace VozovyPark
 
             DataContractSerializer xmlSerializer = new DataContractSerializer(typeof(Databaze));
 
-            using (StreamWriter sw = new StreamWriter(File.Open(jmenoSouboru, FileMode.OpenOrCreate, FileAccess.Write)))
+            using (StreamWriter sw = new StreamWriter(File.Open(jmenoSouboru, FileMode.Create, FileAccess.Write)))
             {
                 using (XmlWriter xw = XmlWriter.Create(sw))
                 {
