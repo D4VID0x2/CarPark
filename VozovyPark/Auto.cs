@@ -19,12 +19,12 @@ namespace VozovyPark
         [DataMember(Name = "typ")]
         public TypAuta Typ { get; private set; }
         [DataMember(Name = "spotreba")]
-        public double SpotrebaNa100km { get; private set; }
+        public decimal SpotrebaNa100km { get; private set; }
 
         [DataMember(Name = "servisniukony")]
         public List<ServisniUkon> servisniUkony { get; private set; }
 
-        public Auto(string znacka, string model, TypAuta typ, double spotreba)
+        public Auto(string znacka, string model, TypAuta typ, decimal spotreba)
         {
             Uid = UID.newUID<Auto>();
             this.Znacka = znacka;
@@ -36,7 +36,7 @@ namespace VozovyPark
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", Znacka, Model);
+            return string.Format("{0} {1} (#{2})", Znacka, Model, Uid);
         }
 
         public string ToStringLong()

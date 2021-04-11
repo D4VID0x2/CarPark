@@ -21,6 +21,7 @@ namespace VozovyPark
                                              "  pridat auto\n" +
                                              "  odebrat auto\n" +
                                              "  seznam aut\n" +
+                                             "  pridat servisni ukon\n" +
                                              "  pridat rezervaci\n" +
                                              "  odebrat rezervaci\n" +
                                              "  seznam rezervaci podle uzivatele\n" +
@@ -80,7 +81,7 @@ namespace VozovyPark
                                     Console.WriteLine(auto.ToStringLong());
                                 }
 
-                                int idAuta = NactiCislo("Zadejte ID auta: ");
+                                int idAuta = NactiCeleCislo("Zadejte ID auta: ");
 
                                 if (volnaAuta.Where(a => a.Uid == idAuta).FirstOrDefault() == null)
                                 {
@@ -102,7 +103,7 @@ namespace VozovyPark
                                     }
                                 }
 
-                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
+                                int idUzivatele = NactiCeleCislo("Zadejte ID uživatele: ");
 
                                 if (uzivatele.Where(u => u.Uid == idUzivatele).FirstOrDefault() == null)
                                 {
@@ -163,8 +164,7 @@ namespace VozovyPark
 
                         case "vynutit zmenu hesla":
                             {
-
-                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
+                                int idUzivatele = NactiCeleCislo("Zadejte ID uživatele: ");
 
                                 if (!databaze.VynutitZmenuHesla(idUzivatele))
                                 {
@@ -177,8 +177,7 @@ namespace VozovyPark
 
                         case "odebrat uzivatele":
                             {
-
-                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
+                                int idUzivatele = NactiCeleCislo("Zadejte ID uživatele: ");
 
                                 if (!databaze.OdebratUzivatele(idUzivatele))
                                 {
@@ -191,7 +190,7 @@ namespace VozovyPark
                         case "odebrat auto":
                             {
 
-                                int idAuta = NactiCislo("Zadejte ID auta: ");
+                                int idAuta = NactiCeleCislo("Zadejte ID auta: ");
 
                                 if (!databaze.OdebratAuto(idAuta))
                                 {
@@ -205,7 +204,7 @@ namespace VozovyPark
                         case "seznam rezervaci podle uzivatele":
                             {
 
-                                int idUzivatele = NactiCislo("Zadejte ID uživatele: ");
+                                int idUzivatele = NactiCeleCislo("Zadejte ID uživatele: ");
 
                                 bool vypsatStare = NactiAnoNe("Vypsat i staré rezervace");
 
@@ -218,8 +217,7 @@ namespace VozovyPark
 
                         case "seznam rezervaci podle auta":
                             {
-
-                                int idAuta = NactiCislo("Zadejte ID auta: ");
+                                int idAuta = NactiCeleCislo("Zadejte ID auta: ");
 
                                 bool vypsatStare = NactiAnoNe("Vypsat i staré rezervace");
 
@@ -242,8 +240,43 @@ namespace VozovyPark
                             foreach (Auto auto in databaze.VsechnaAuta())
                             {
                                 Console.WriteLine(auto.ToStringLong());
+                                Console.WriteLine("  Servisní úkony:");
+                                foreach (ServisniUkon ukon in auto.servisniUkony)
+                                {
+                                    Console.WriteLine(ukon);
+                                }
+
                             }
                             break;
+
+                        case "pridat servisni ukon":
+                            {
+                                int idAuta = NactiCeleCislo("Zadejte ID auta: ");
+
+                                DateTime od = NactiDatum("Od: ");
+                                DateTime @do = NactiDatum("Do: ");
+                                if (@do < od)
+                                {
+                                    Console.WriteLine("Chyba: Zadaná hodnota Do nesmí být větší než hodnota Od");
+                                    goto loop;
+                                }
+
+                                decimal cena = NactiDecimal("Zadejte cenu: ");
+
+                                Console.Write("Zadejte popis: ");
+                                string popis = Console.ReadLine();
+
+                                int cisloFaktury = NactiCeleCislo("Zadejte číslo faktury: ");
+
+                                if (!databaze.PridatServisniUkon(idAuta, od, @do, cena, popis, cisloFaktury))
+                                {
+                                    Console.WriteLine("Chyba: Servisní úkon se nepodařilo přidat, zadané auto neexistuje anebo je v tu dobu zarezervované");
+                                    goto loop;
+                                }
+                                Console.WriteLine("Servisní úkon úspěšně přidán");
+                                break;
+                            }
+
 
                         case "pridat auto":
                             Console.Write("Zadejte značku: ");
@@ -251,7 +284,7 @@ namespace VozovyPark
                             Console.Write("Zadejte model: ");
                             string model = Console.ReadLine();
                             Console.Write("Typy aut:\n  1: osobní\n  2: nákladní");
-                            int zadanyTyp = NactiCislo("Zadejte typ auta: ");
+                            int zadanyTyp = NactiCeleCislo("Zadejte typ auta: ");
 
                             if (!Enum.IsDefined(typeof(TypAuta), zadanyTyp))
                             {
@@ -260,7 +293,7 @@ namespace VozovyPark
                             }
                             TypAuta typ = (TypAuta)zadanyTyp;
 
-                            double spotreba = NactiDouble("Zadejte spotřebu na 100km: ");
+                            decimal spotreba = NactiDecimal("Zadejte spotřebu na 100km: ");
 
                             databaze.PridatAuto(znacka, model, typ, spotreba);
 
@@ -270,7 +303,7 @@ namespace VozovyPark
 
                         case "odebrat rezervaci":
 
-                            int idRezervace = NactiCislo("Zadejte ID rezervace: ");
+                            int idRezervace = NactiCeleCislo("Zadejte ID rezervace: ");
 
                             if (!databaze.OdebratRezervaci(idRezervace, uzivatel.Uid))
                             {
@@ -341,7 +374,7 @@ namespace VozovyPark
                                 Console.WriteLine(auto.ToStringLong());
                             }
 
-                            int idAuta = NactiCislo("Zadejte ID auta: ");
+                            int idAuta = NactiCeleCislo("Zadejte ID auta: ");
 
                             if (volnaAuta.Where(a => a.Uid == idAuta).FirstOrDefault() == null)
                             {
@@ -357,7 +390,7 @@ namespace VozovyPark
 
                         case "odebrat rezervaci":
 
-                            int idRezervace = NactiCislo("Zadejte ID rezervace: ");
+                            int idRezervace = NactiCeleCislo("Zadejte ID rezervace: ");
 
                             if (!databaze.OdebratRezervaci(idRezervace, uzivatel.Uid))
                             {
@@ -536,7 +569,7 @@ namespace VozovyPark
             return dt;
         }
 
-        public static int NactiCislo(string vyzva)
+        public static int NactiCeleCislo(string vyzva)
         {
             int cislo;
             while (true)
@@ -552,13 +585,13 @@ namespace VozovyPark
             return cislo;
         }
 
-        public static double NactiDouble(string vyzva)
+        public static decimal NactiDecimal(string vyzva)
         {
-            double cislo;
+            decimal cislo;
             while (true)
             {
                 Console.Write(vyzva);
-                if (!double.TryParse(Console.ReadLine(), out cislo))
+                if (!decimal.TryParse(Console.ReadLine(), out cislo))
                 {
                     Console.WriteLine("Zadaná hodnota musí být číslo");
                     continue;

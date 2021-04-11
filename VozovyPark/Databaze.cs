@@ -129,31 +129,7 @@ namespace VozovyPark
             List<Auto> volnaAuta = new List<Auto>();
             foreach (Auto auto in auta)
             {
-                bool jeVolne = true;
-                foreach (Rezervace r in VsechnyRezervacePodleAuta(auto.Uid))
-                {
-                    if (od >= r.Od && od <= r.Do) 
-                    {
-                        jeVolne = false;
-                        break;
-                    }
-                    if (@do >= r.Od && @do <= r.Do) 
-                    {
-                        jeVolne = false;
-                        break;
-                    }
-                    if (r.Od >= od && r.Od <= @do) 
-                    {
-                        jeVolne = false;
-                        break;
-                    }
-                    if (r.Do >= od && r.Do <= @do) 
-                    {
-                        jeVolne = false;
-                        break;
-                    }
-                }
-                if (jeVolne)
+                if (JeAutoVolne(auto, od, @do))
                 {
                     volnaAuta.Add(auto);
                 }
@@ -162,7 +138,59 @@ namespace VozovyPark
             return volnaAuta;
         }
 
-        public void PridatAuto(string znacka, string model, TypAuta typ, double spotreba)
+        private bool JeAutoVolne(Auto auto, DateTime od, DateTime @do)
+        {
+            bool jeVolne = true;
+            foreach (Rezervace r in VsechnyRezervacePodleAuta(auto.Uid))
+            {
+                if (od >= r.Od && od <= r.Do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+                if (@do >= r.Od && @do <= r.Do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+                if (r.Od >= od && r.Od <= @do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+                if (r.Do >= od && r.Do <= @do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+            }
+            foreach (ServisniUkon s in auto.servisniUkony)
+            {
+                if (od >= s.Od && od <= s.Do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+                if (@do >= s.Od && @do <= s.Do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+                if (s.Od >= od && s.Od <= @do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+                if (s.Do >= od && s.Do <= @do)
+                {
+                    jeVolne = false;
+                    break;
+                }
+            }
+            return jeVolne;
+        }
+
+        public void PridatAuto(string znacka, string model, TypAuta typ, decimal spotreba)
         {
             auta.Add(new Auto(znacka, model, typ, spotreba));
         }
@@ -220,6 +248,25 @@ namespace VozovyPark
             }
 
             auta.Remove(auto);
+
+            return true;
+        }
+
+        public bool PridatServisniUkon(int idAuta, DateTime od, DateTime @do, decimal cena, string popis, int cisloFaktury)
+        {
+            Auto auto = Auto(idAuta);
+
+            if (auto == null)
+            {
+                return false;
+            }
+
+            if (!JeAutoVolne(auto, od, @do))
+            {
+                return false;
+            }
+
+            auto.servisniUkony.Add(new ServisniUkon(od, @do, cena, popis, cisloFaktury));
 
             return true;
         }

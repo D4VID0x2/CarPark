@@ -29,6 +29,10 @@ namespace VozovyPark
             CisloFaktury = cisloFaktury;
         }
 
+        public override string ToString()
+        {
+            return string.Format("    #{0}:\n      Od: {1}\n      Do: {2}\n      Popis: {3}\n      Cena: {4}\n      Číslo faktury: {5}", Uid, Od, Do, Popis, Cena, CisloFaktury);
+        }
 
     }
 }
